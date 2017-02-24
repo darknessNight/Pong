@@ -90,13 +90,13 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\packages\sfml-system.2.4.0.0\build\native\include;$(VCToolsInstallDir)..\..\..\Auxiliary\VS\UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\packages\sfml-system.2.4.0.0\build\native\include;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_STATIC;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\Win32;$(SolutionDir)packages\sfml-graphics.2.4.0.0\build\native\lib\Win32\v140\Debug\static;$(SolutionDir)packages\sfml-network.2.4.0.0\build\native\lib\Win32\v140\Debug\static;$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\Win32\v140\Debug\static;$(SolutionDir)packages\sfml-window.2.4.0.0\build\native\lib\Win32\v140\Debug\static;$(SolutionDir)packages\sfml-audio.2.4.0.0\build\native\lib\Win32\v140\Debug\static;$(VCToolsInstallDir)..\..\..\Auxiliary\VS\UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\Win32;$(SolutionDir)packages\sfml-graphics.2.4.0.0\build\native\lib\Win32\v140\Debug\static;$(SolutionDir)packages\sfml-network.2.4.0.0\build\native\lib\Win32\v140\Debug\static;$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\Win32\v140\Debug\static;$(SolutionDir)packages\sfml-window.2.4.0.0\build\native\lib\Win32\v140\Debug\static;$(SolutionDir)packages\sfml-audio.2.4.0.0\build\native\lib\Win32\v140\Debug\static;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;freetype.lib;jpeg.lib;winmm.lib;gdi32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;sfml-system-s-d.lib;sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-audio-s-d.lib;sfml-network-s-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -105,13 +105,13 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\packages\sfml-system.2.4.0.0\build\native\include;$(VCToolsInstallDir)..\..\..\Auxiliary\VS\UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\packages\sfml-system.2.4.0.0\build\native\include;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_STATIC;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\x64;$(SolutionDir)packages\sfml-graphics.2.4.0.0\build\native\lib\x64\v140\Debug\static;$(SolutionDir)packages\sfml-network.2.4.0.0\build\native\lib\x64\v140\Debug\static;$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\x64\v140\Debug\static;$(SolutionDir)packages\sfml-window.2.4.0.0\build\native\lib\x64\v140\Debug\static;$(SolutionDir)packages\sfml-audio.2.4.0.0\build\native\lib\x64\v140\Debug\static;$(VCToolsInstallDir)..\..\..\Auxiliary\VS\UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\x64;$(SolutionDir)packages\sfml-graphics.2.4.0.0\build\native\lib\x64\v140\Debug\static;$(SolutionDir)packages\sfml-network.2.4.0.0\build\native\lib\x64\v140\Debug\static;$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\x64\v140\Debug\static;$(SolutionDir)packages\sfml-window.2.4.0.0\build\native\lib\x64\v140\Debug\static;$(SolutionDir)packages\sfml-audio.2.4.0.0\build\native\lib\x64\v140\Debug\static;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;freetype.lib;jpeg.lib;winmm.lib;gdi32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;sfml-system-s-d.lib;sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-audio-s-d.lib;sfml-network-s-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -122,7 +122,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\packages\sfml-system.2.4.0.0\build\native\include;$(VCToolsInstallDir)..\..\..\Auxiliary\VS\UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\packages\sfml-system.2.4.0.0\build\native\include;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_STATIC;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
     </ClCompile>
@@ -130,7 +130,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\Win32;$(SolutionDir)packages\sfml-graphics.2.4.0.0\build\native\lib\Win32\v140\Release\static;$(SolutionDir)packages\sfml-network.2.4.0.0\build\native\lib\Win32\v140\Release\static;$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\Win32\v140\Release\static;$(SolutionDir)packages\sfml-window.2.4.0.0\build\native\lib\Win32\v140\Release\static;$(SolutionDir)packages\sfml-audio.2.4.0.0\build\native\lib\Win32\v140\Release\static;$(VCToolsInstallDir)..\..\..\Auxiliary\VS\UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\Win32;$(SolutionDir)packages\sfml-graphics.2.4.0.0\build\native\lib\Win32\v140\Release\static;$(SolutionDir)packages\sfml-network.2.4.0.0\build\native\lib\Win32\v140\Release\static;$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\Win32\v140\Release\static;$(SolutionDir)packages\sfml-window.2.4.0.0\build\native\lib\Win32\v140\Release\static;$(SolutionDir)packages\sfml-audio.2.4.0.0\build\native\lib\Win32\v140\Release\static;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;freetype.lib;jpeg.lib;winmm.lib;gdi32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;sfml-system-s.lib;sfml-graphics-s.lib;sfml-window-s.lib;sfml-audio-s.lib;sfml-network-s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -141,7 +141,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\packages\sfml-system.2.4.0.0\build\native\include;$(VCToolsInstallDir)..\..\..\Auxiliary\VS\UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\packages\sfml-system.2.4.0.0\build\native\include;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_STATIC;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
     </ClCompile>
@@ -149,7 +149,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\x64;$(SolutionDir)packages\sfml-graphics.2.4.0.0\build\native\lib\x64\v140\Release\static;$(SolutionDir)packages\sfml-network.2.4.0.0\build\native\lib\x64\v140\Release\static;$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\x64\v140\Release\static;$(SolutionDir)packages\sfml-window.2.4.0.0\build\native\lib\x64\v140\Release\static;$(SolutionDir)packages\sfml-audio.2.4.0.0\build\native\lib\x64\v140\Release\static;$(VCToolsInstallDir)..\..\..\Auxiliary\VS\UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\x64;$(SolutionDir)packages\sfml-graphics.2.4.0.0\build\native\lib\x64\v140\Release\static;$(SolutionDir)packages\sfml-network.2.4.0.0\build\native\lib\x64\v140\Release\static;$(SolutionDir)packages\sfml-system.2.4.0.0\build\native\lib\x64\v140\Release\static;$(SolutionDir)packages\sfml-window.2.4.0.0\build\native\lib\x64\v140\Release\static;$(SolutionDir)packages\sfml-audio.2.4.0.0\build\native\lib\x64\v140\Release\static;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;freetype.lib;jpeg.lib;winmm.lib;gdi32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib;sfml-system-s.lib;sfml-graphics-s.lib;sfml-window-s.lib;sfml-audio-s.lib;sfml-network-s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
