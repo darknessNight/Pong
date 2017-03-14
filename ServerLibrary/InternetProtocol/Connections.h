@@ -18,11 +18,7 @@ namespace Pong
 
 			virtual std::vector<byte> ReadAllBytes() = 0;
 			virtual std::vector<byte> ReadBytesToDelimiter(byte delimiter) = 0;
-			virtual void SendBytes(std::vector<byte> bytes)
-			{
-				SendBytes(bytes.begin(), bytes.end());
-			}
-			template <typename iterator> virtual void SendBytes(iterator begin, iterator end) = 0;
+			virtual void SendBytes(std::vector<byte> bytes) = 0;
 			virtual unsigned GetId() = 0;
 
 			virtual void SetDisconnectAction(std::function<void(Connection*)>) = 0;

@@ -33,9 +33,21 @@
     <ClInclude Include="InternetProtocol\Connections.h">
       <Filter>Header Files\InternetProtocol</Filter>
     </ClInclude>
+    <ClInclude Include="IoC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InternetProtocol\ConnectionFactory.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
+    <ClInclude Include="InternetProtocol\TcpConnectionFactory.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IoC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
