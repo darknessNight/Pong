@@ -42,6 +42,9 @@
     <ClInclude Include="InternetProtocol\TcpConnectionFactory.h">
       <Filter>Header Files\InternetProtocol</Filter>
     </ClInclude>
+    <ClInclude Include="InternetProtocol\JsonServerProtocolConnection.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

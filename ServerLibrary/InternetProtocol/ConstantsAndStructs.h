@@ -13,7 +13,7 @@ namespace Pong
 	{
 		enum UserIds
 		{
-			Player1=0xff0,
+			Player1 = 0xff0,
 			Player2,
 			Player3
 		};
@@ -26,18 +26,24 @@ namespace Pong
 				BallCommon,
 				BallRed,
 				Wall,
-				Player1=0xff0,
-				Player2,
-				Player3,
+				Player1 = UserIds::Player1,
+				Player2 = UserIds::Player2,
+				Player3 = UserIds::Player3,
 			};
 
 			float x, y;
 			Type type;
+			unsigned char lives;
 		};
 
 		enum UserActionTypes
 		{
-
+			StartMoveLeft,
+			StopMoveLeft,
+			StartMoveRight,
+			StopMoveRight,
+			Shield,
+			Shoot
 		};
 	}
 }
