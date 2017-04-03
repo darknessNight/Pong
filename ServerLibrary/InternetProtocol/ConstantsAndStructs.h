@@ -4,9 +4,9 @@ namespace Pong
 {
 	namespace Consts
 	{
-		const int PLAYER_WIDTH = 0.1;
-		const int BALL_RADIUS = 0.01;
-		const int WALL_WIDTH = 1.f;
+		const double PLAYER_WIDTH = 0.1;
+		const double BALL_RADIUS = 0.01;
+		const double WALL_WIDTH = 1.f;
 	}
 
 	namespace Internet
@@ -34,6 +34,7 @@ namespace Pong
 			float x, y;
 			Type type;
 			unsigned char lives;
+			bool shielded;
 		};
 
 		enum UserActionTypes

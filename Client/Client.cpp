@@ -4,9 +4,7 @@
 #include "stdafx.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include <Hypodermic\ContainerBuilder.h>
 #include "../ServerLibrary/InternetProtocol/TcpConnectionFactory.h"
-#include "../ServerLibrary/IoC.h"
 
 int main()
 {
