@@ -1,5 +1,11 @@
 #include "GameWindow.h"
 
+GameWindow::GameWindow(std::string adres, int port) {
+	this->adres = adres;
+	this->port = port;
+}
+
+
 void GameWindow::start() {
 
 	this->window.create(sf::VideoMode(WINDOWSIZE, WINDOWSIZE), "PONG",sf::Style::Close);
