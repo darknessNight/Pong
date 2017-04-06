@@ -1,18 +1,38 @@
 #pragma once
 #include <exception>
 
+
 namespace Pong
 {
 	namespace GameEngine
 	{
 		struct Pointf
 		{
-			float x, y;
+			Pointf(float x, float y) {
+				this->x = x;
+				this->y = y;
+			}
+			Pointf() = default;
+
+			float x = 0;
+			float y = 0;
 
 			bool operator==(const Pointf& other) const
 			{
-				return x == other.x&&y == other.y;
+				return x == other.x && y == other.y;
 			}
+
+			friend Pointf operator+(const Pointf& left, const Pointf& right) {
+				return Pointf(left.x + right.x, left.y + right.y);
+			}
+
+			Pointf operator+=(const Pointf& other) const {
+				Pointf newPointf(other);
+				newPointf.x += other.x;
+				newPointf.y += other.y;
+				return newPointf;
+			}
+
 		};
 
 		class GameObject
@@ -24,14 +44,17 @@ namespace Pong
 			};
 		private:
 			friend class GameEngine;
+			Pointf position, size;
+			Type type;
 
 		protected:
 			virtual void SetPos(Pointf){}//brak testów. trzeba dopisaæ
 			virtual void SetSize(Pointf) {}
 			virtual void SetType(Type) {}
 		public:
-			virtual Pointf GetPos() const { return{ 0,0 }; }
-			virtual Pointf GetSize() const{ return{ 0,0 }; }
+			GameObject(Pointf pos, Pointf size, Type type);
+			virtual Pointf GetPos() const { return position; }
+			virtual Pointf GetSize() const{ return size; }
 			virtual Type GetType() const { return Type::Test; }
 
 			bool operator==(const GameObject& other) const
