@@ -13,27 +13,30 @@ namespace Microsoft
 		{
 			template<> inline std::wstring ToString<Pong::GameEngine::GameObject>(const Pong::GameEngine::GameObject& q)
 			{
-				return std::to_wstring(q.GetType()) + std::to_wstring(q.GetPos().x) + std::to_wstring(q.GetPos().y);
+				return std::to_wstring(q.GetType())+L" " + std::to_wstring(q.GetPos().x) + L" " + std::to_wstring(q.GetPos().y);
 			}
 			template<> inline std::wstring ToString<Pong::GameEngine::GameObject>(const Pong::GameEngine::GameObject* q)
 			{
-				return std::to_wstring(q->GetType()) + std::to_wstring(q->GetPos().x) + std::to_wstring(q->GetPos().y);
+				return std::to_wstring(q->GetType()) + L" " + std::to_wstring(q->GetPos().x) + L" " + std::to_wstring(q->GetPos().y);
 			}
 			template<> inline std::wstring ToString<Pong::GameEngine::Pointf>(const Pong::GameEngine::Pointf& q)
 			{
-				return std::to_wstring(q.x) + std::to_wstring(q.y);
+				return std::to_wstring(q.x) + L" " + std::to_wstring(q.y);
 			}
 			template<> inline std::wstring ToString<Pong::GameEngine::Pointf>(const Pong::GameEngine::Pointf* q)
 			{
-				return std::to_wstring(q->x) + std::to_wstring(q->y);
+				return std::to_wstring(q->x) + L" " + std::to_wstring(q->y);
 			}
 			template<> inline std::wstring ToString<std::vector<std::shared_ptr<Pong::GameEngine::GameObject>>>(const std::vector<std::shared_ptr<Pong::GameEngine::GameObject>>& q)
 			{
-				return std::wstring();
+				std::wstringstream wss;
+				for (auto el : q)
+					wss<<"'" << ToString(*el) << "' ";
+				return wss.str();
 			}
 			template<> inline std::wstring ToString<std::vector<std::shared_ptr<Pong::GameEngine::GameObject>>>(const std::vector<std::shared_ptr<Pong::GameEngine::GameObject>>* q)
 			{
-				return std::wstring();
+				return ToString(*q);
 			}
 		}
 	}
@@ -49,6 +52,12 @@ namespace Pong
 			Pointf pos, size;
 			Type type;
 		public:
+			TestGameObject() :GameObject({ 0,0 }, { 0,0 }, (Type)0) {
+				pos = { 0,0 };
+				size = { 0,0 };
+				type = (Type)0;
+			}
+
 			void SetPos(Pointf p) override { pos = p; }
 			void SetSize(Pointf s)override { size = s; }
 			void SetType(Type t)override
@@ -102,7 +111,7 @@ namespace Pong
 				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::Test);
 
 				auto result = gameEngine->WillCollide(o2, { -10,0 });
-				Assert::IsFalse(result);
+				Assert::IsTrue(result);
 			}
 
 			TEST_METHOD(WillCollide_HasTwoNonCollideObjectsWithBoundaryTouch0YAxis_CheckReturnFalse)
@@ -113,7 +122,7 @@ namespace Pong
 				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::Test);
 
 				auto result = gameEngine->WillCollide(o2, { 0,-10 });
-				Assert::IsFalse(result);
+				Assert::IsTrue(result);
 			}
 
 			TEST_METHOD(WillCollide_HasTwoCollideObjects0XAxisMinusShift_CheckReturnTrue)
@@ -168,7 +177,7 @@ namespace Pong
 				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::Test);
 
 				auto result = gameEngine->WillCollide(o2, { -100,0 });
-				Assert::IsTrue(result);
+				Assert::IsFalse(result);
 			}
 
 			TEST_METHOD(WillCollide_HasTwoCollideObjectsWithShiftAfterObject0YAxis_CheckReturnTrue)
@@ -202,7 +211,7 @@ namespace Pong
 				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::Test);
 
 				auto result = gameEngine->MoveObject(o2, { 0,-10 });
-				Assert::AreEqual({ 100,200 }, o2->GetPos());
+				Assert::AreNotEqual({ 100,200 }, o2->GetPos());
 			}
 
 			TEST_METHOD(MoveObject_HasTwoNonCollideObject_CheckChangedPos)
@@ -215,7 +224,6 @@ namespace Pong
 				auto result = gameEngine->MoveObject(o2, { 0,10 });
 				Assert::AreEqual({ 100,220 }, o2->GetPos());
 			}
-
 		};
 	}
 }
