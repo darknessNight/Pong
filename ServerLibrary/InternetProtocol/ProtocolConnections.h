@@ -23,6 +23,7 @@ namespace Pong
 			virtual std::vector<ConnectionObject> GetAllObjectsFromServer() = 0;
 			virtual std::vector<ConnectionObject> GetLatestObjectsFromServer() = 0;
 			virtual void SendActionToServer(UserActionTypes action) = 0;
+			virtual UserIds GetMyId() = 0;
 		};
 	}
 }
