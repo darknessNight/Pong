@@ -53,7 +53,6 @@ bool Pong::GameEngine::GameEngine::WillCollide(std::shared_ptr<GameObject> obj, 
 
 bool Pong::GameEngine::GameEngine::checkDeadzoneAndObjectsNewPosition(GameObject* obj, Pointf shift)
 {
-	GameObject* object;
 	Corners cornersOfObject = getShiftedCorners(obj, shift);
 	Pointf position = obj->GetPos();
 	Pointf size = obj->GetSize();
@@ -62,20 +61,28 @@ bool Pong::GameEngine::GameEngine::checkDeadzoneAndObjectsNewPosition(GameObject
 
 	for (unsigned int i = 0; i < gameObjectsVector.size(); i++)
 	{
-		object = gameObjectsVector.at(i).get();
+		GameObject* object = gameObjectsVector.at(i).get();
+		if (object == obj) {
+			continue;
+		}
+		Corners cornersOfCheckedOcject = getShiftedCorners(object, { 0,0 });
+
 		if (checkIfPositionsAreEqual(object, cornersOfObject))
 			return true;
 
 		if (checkNewPosition(object, cornersOfObject))
 			return true;
 
-		if (DeadZone.checkIfInDeadZone(cornersOfObject.lowerLeft))
+		if (DeadZone.checkIfInDeadZone(getCenterPointBasedOnCorners(cornersOfCheckedOcject)))
 			return true;
-		if (DeadZone.checkIfInDeadZone(cornersOfObject.lowerRight))
+
+		if (DeadZone.checkIfInDeadZone(cornersOfCheckedOcject.lowerLeft))//was cornderOfObject before
 			return true;
-		if (DeadZone.checkIfInDeadZone(cornersOfObject.upperLeft))
+		if (DeadZone.checkIfInDeadZone(cornersOfCheckedOcject.lowerRight))
 			return true;
-		if (DeadZone.checkIfInDeadZone(cornersOfObject.upperRight))
+		if (DeadZone.checkIfInDeadZone(cornersOfCheckedOcject.upperLeft))
+			return true;
+		if (DeadZone.checkIfInDeadZone(cornersOfCheckedOcject.upperRight))
 			return true;
 	}
 
@@ -95,7 +102,7 @@ Corners Pong::GameEngine::GameEngine::getShiftedCorners(GameObject* obj, Pointf 
 	corner.lowerLeft.y += objectSize.y;
 	corner.upperRight.x += objectSize.x;
 	corner.lowerRight.x += objectSize.x;
-	corner.lowerRight.y = objectSize.y;
+	corner.lowerRight.y += objectSize.y;
 
 	return Corners(corner);
 }
@@ -152,6 +159,17 @@ Pointf* Pong::GameEngine::GameEngine::getCornersInArray(GameObject * obj, Pointf
 	pointsArray[3] = corner.lowerRight;
 
 	return pointsArray;
+}
+
+Pointf Pong::GameEngine::GameEngine::getCenterPointBasedOnCorners(Corners corners)
+{
+	float diffX, diffY;
+	diffX = corners.upperRight.x - corners.upperLeft.x;
+	diffY = corners.lowerLeft.y - corners.upperLeft.y;
+	Pointf centerPoint;
+	centerPoint.x = corners.upperLeft.x + diffX/2;
+	centerPoint.y = corners.upperLeft.y + diffY/2;
+	return Pointf(centerPoint);
 }
 
 

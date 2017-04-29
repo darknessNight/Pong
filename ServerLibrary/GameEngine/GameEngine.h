@@ -22,6 +22,7 @@ namespace Pong
 
 			Corners getShiftedCorners(GameObject* obj, Pointf shift);
 			Pointf* getCornersInArray(GameObject* obj, Pointf shift);
+			Pointf getCenterPointBasedOnCorners(Corners corners);
 			bool checkDeadzoneAndObjectsNewPosition(GameObject* obj, Pointf shift);
 			bool checkNewPosition(GameObject* obj1, Corners cornersOfObject);
 			bool checkIfPositionsAreEqual(GameObject* obj, Corners cornersOfOcject);

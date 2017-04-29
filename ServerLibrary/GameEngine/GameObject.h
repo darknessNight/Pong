@@ -48,9 +48,9 @@ namespace Pong
 			Type type;
 
 		protected:
-			virtual void SetPos(Pointf){}//brak testów. trzeba dopisaæ
-			virtual void SetSize(Pointf) {}
-			virtual void SetType(Type) {}
+			virtual void SetPos(Pointf p) { position = p; }//brak testów. trzeba dopisaæ
+			virtual void SetSize(Pointf s) { size = s; }
+			virtual void SetType(Type t) { type = t; }
 		public:
 			GameObject(Pointf pos, Pointf size, Type type);
 			virtual Pointf GetPos() const { return position; }
