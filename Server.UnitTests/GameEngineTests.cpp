@@ -226,6 +226,47 @@ namespace Pong
 				auto result = gameEngine->MoveObject(o2, { 0,10 });
 				Assert::AreEqual({ 100,220 }, o2->GetPos());
 			}
+			TEST_METHOD(WillColide_MultipleObjectsCollision_IsTrue)
+			{
+				auto gameEngine = PrepareGameEngine();
+
+				auto o1 = gameEngine->CreateObject({ 10,10 }, { 10,10 }, GameObject::Type::Test);
+				auto o2 = gameEngine->CreateObject({ 40,60 }, { 10,10 }, GameObject::Type::Test);
+				auto o3 = gameEngine->CreateObject({ 71,50 }, { 10,10 }, GameObject::Type::Test);
+
+				auto result = gameEngine->WillCollide(o1, { 100,100 });
+				Assert::IsTrue(result);
+			}
+			TEST_METHOD(WillColide_CollisionWithBroadVerticalPallete_IsTrue)
+			{
+				auto gameEngine = PrepareGameEngine();
+
+				auto o1 = gameEngine->CreateObject({ 25,10 }, { 10,10 }, GameObject::Type::Test);
+				auto o2 = gameEngine->CreateObject({ 10,50 }, { 100,10 }, GameObject::Type::Test);
+
+				auto result = gameEngine->WillCollide(o1, { 0,100 });
+				Assert::IsTrue(result);
+			}
+			TEST_METHOD(WillColide_CollisionWithBroadVerticalPalleteCase2_IsTrue)
+			{
+				auto gameEngine = PrepareGameEngine();
+
+				auto o1 = gameEngine->CreateObject({ 10,10 }, { 10,10 }, GameObject::Type::Test);
+				auto o2 = gameEngine->CreateObject({ 10,50 }, { 100,10 }, GameObject::Type::Test);
+
+				auto result = gameEngine->WillCollide(o1, { 100,100 });
+				Assert::IsTrue(result);
+			}
+			TEST_METHOD(WillColide_CollisionWithBroadHorizontalPallete_IsTrue)
+			{
+				auto gameEngine = PrepareGameEngine();
+
+				auto o1 = gameEngine->CreateObject({ 10,25 }, { 10,10 }, GameObject::Type::Test);
+				auto o2 = gameEngine->CreateObject({ 50,10 }, { 10,100 }, GameObject::Type::Test);
+
+				auto result = gameEngine->WillCollide(o1, { 100,0 });
+				Assert::IsTrue(result);
+			}
 		};
 	}
 }

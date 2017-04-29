@@ -65,7 +65,8 @@ namespace Pong
 			float F1(float x);
 			float F2(float x);
 			
-			bool checkIfInDeadZone(Pointf pos);
+			bool checkIfPointIsInDeadZone(Pointf pos);
+			bool checkIfDeadZoneOverlapsObject(Corners corners);
 			bool pointIsWithinDomain(float x);
 
 		private:

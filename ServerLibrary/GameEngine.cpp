@@ -73,16 +73,19 @@ bool Pong::GameEngine::GameEngine::checkDeadzoneAndObjectsNewPosition(GameObject
 			return true;
 
 
-		if (DeadZone.checkIfInDeadZone(getCenterPointBasedOnCorners(cornersOfCheckedOcject)))
+		if (DeadZone.checkIfPointIsInDeadZone(getCenterPointBasedOnCorners(cornersOfCheckedOcject)))
 			return true;
 
-		if (DeadZone.checkIfInDeadZone(cornersOfCheckedOcject.lowerLeft))//was cornderOfObject before
+		if (DeadZone.checkIfPointIsInDeadZone(cornersOfCheckedOcject.upperLeft))//was cornderOfObject before
 			return true;
-		if (DeadZone.checkIfInDeadZone(cornersOfCheckedOcject.lowerRight))
+		if (DeadZone.checkIfPointIsInDeadZone(cornersOfCheckedOcject.upperRight))
 			return true;
-		if (DeadZone.checkIfInDeadZone(cornersOfCheckedOcject.upperLeft))
+		if (DeadZone.checkIfPointIsInDeadZone(cornersOfCheckedOcject.lowerLeft))
 			return true;
-		if (DeadZone.checkIfInDeadZone(cornersOfCheckedOcject.upperRight))
+		if (DeadZone.checkIfPointIsInDeadZone(cornersOfCheckedOcject.lowerRight))
+			return true;
+
+		if (DeadZone.checkIfDeadZoneOverlapsObject(cornersOfCheckedOcject))
 			return true;
 	}
 
