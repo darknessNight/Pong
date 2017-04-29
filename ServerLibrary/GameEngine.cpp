@@ -66,12 +66,12 @@ bool Pong::GameEngine::GameEngine::checkDeadzoneAndObjectsNewPosition(GameObject
 			continue;
 		}
 		Corners cornersOfCheckedOcject = getShiftedCorners(object, { 0,0 });
-
 		if (checkIfPositionsAreEqual(object, cornersOfObject))
 			return true;
 
 		if (checkNewPosition(object, cornersOfObject))
 			return true;
+
 
 		if (DeadZone.checkIfInDeadZone(getCenterPointBasedOnCorners(cornersOfCheckedOcject)))
 			return true;
@@ -171,7 +171,6 @@ Pointf Pong::GameEngine::GameEngine::getCenterPointBasedOnCorners(Corners corner
 	centerPoint.y = corners.upperLeft.y + diffY/2;
 	return Pointf(centerPoint);
 }
-
 
 
 

@@ -105,6 +105,7 @@ bool Pong::GameEngine::LinearFunctions_Deadzones::checkIfInDeadZone(Pointf pos)
 		float y1 = F1(pos.x);	//F1 returns the lower (coordination-wise) higher coord.
 		float y2 = F2(pos.x);	//F2 returns the higher (coordination-wise) lower coord.
 		if (pos.y <= y1 && pos.y >= y2)
+
 			return true;
 	}
 	else if(pointIsWithinDomain(pos.y)){

@@ -177,7 +177,9 @@ namespace Pong
 				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::Test);
 
 				auto result = gameEngine->WillCollide(o2, { -100,0 });
+
 				Assert::IsTrue(result);
+
 			}
 
 			TEST_METHOD(WillCollide_HasTwoCollideObjectsWithShiftAfterObject0YAxis_CheckReturnTrue)
