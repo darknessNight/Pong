@@ -18,6 +18,7 @@ namespace Pong
 
 			virtual std::vector<byte> ReadAllBytes() = 0;
 			virtual std::vector<byte> ReadBytesToDelimiter(byte delimiter) = 0;
+			virtual std::vector<byte> ReadBytes(unsigned size) = 0;
 			virtual void SendBytes(std::vector<byte> bytes) = 0;
 			virtual unsigned GetId() = 0;
 
