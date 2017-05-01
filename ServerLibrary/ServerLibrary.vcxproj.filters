@@ -45,7 +45,10 @@
     <ClInclude Include="InternetProtocol\JsonServerProtocolConnection.h">
       <Filter>Header Files\InternetProtocol</Filter>
     </ClInclude>
-    <ClInclude Include="InternetProtocol\TcpConnections.h">
+    <ClInclude Include="InternetProtocol\TcpConnection.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
+    <ClInclude Include="InternetProtocol\TcpServer.h">
       <Filter>Header Files\InternetProtocol</Filter>
     </ClInclude>
   </ItemGroup>

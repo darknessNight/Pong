@@ -14,6 +14,12 @@ namespace Pong
 			std::function<void(Connection*)> disconnectAction,
 				errorAction;
 			std::vector<byte> lastBuffer;
+			friend class TcpServer;
+		protected:
+			TcpConnection()
+			{
+				myId = NextId++;
+			}
 		public:
 			TcpConnection(std::string ip, int port)
 			{
