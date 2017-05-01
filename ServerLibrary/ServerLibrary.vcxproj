@@ -130,6 +130,7 @@
     <ClInclude Include="InternetProtocol\ConnectionFactory.h" />
     <ClInclude Include="InternetProtocol\ConstantsAndStructs.h" />
     <ClInclude Include="InternetProtocol\Connections.h" />
+    <ClInclude Include="InternetProtocol\JsonClientProtocolConnection.h" />
     <ClInclude Include="InternetProtocol\ProtocolConnections.h" />
     <ClInclude Include="InternetProtocol\TcpConnectionFactory.h" />
     <ClInclude Include="InternetProtocol\JsonServerProtocolConnection.h" />

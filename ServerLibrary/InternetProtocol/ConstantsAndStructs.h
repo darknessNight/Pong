@@ -1,4 +1,5 @@
 #pragma once
+#include <chrono>
 
 namespace Pong
 {
@@ -44,6 +45,17 @@ namespace Pong
 			StopMoveRight,
 			Shield,
 			Shoot
+		};
+
+		struct UserMove
+		{
+			UserActionTypes moveType;
+			std::chrono::microseconds time;
+
+			bool operator==(const UserMove& other) const
+			{
+				return moveType == other.moveType && time == other.time;
+			}
 		};
 	}
 }

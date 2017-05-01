@@ -11,10 +11,9 @@ namespace Pong
 		public:
 			virtual unsigned AddUserConnectionAndGetId(std::shared_ptr<Connection>)=0;
 			virtual void SendObjectsToAll(std::vector<ConnectionObject> objects)=0;
-			virtual void SendObjectsToUser(std::vector<ConnectionObject> objects, std::shared_ptr<Connection>) = 0;
-			virtual std::vector<UserActionTypes> GetActionsForUser(std::shared_ptr<Connection>)=0;
-			virtual std::vector<UserActionTypes> GetActionsForUserId(unsigned id) = 0;
-			virtual std::vector<std::pair<unsigned, std::vector<UserActionTypes>>> GetAllUsersActions() = 0;
+			virtual void SendObjectsToUser(const std::vector<ConnectionObject>& objects, std::shared_ptr<Connection>) = 0;
+			virtual std::vector<UserMove> GetActionsForUser(std::shared_ptr<Connection>) =0;
+			virtual std::vector<UserMove> GetActionsForUserId(unsigned id) = 0;
 		};
 
 		class ClientProtocolConnection abstract

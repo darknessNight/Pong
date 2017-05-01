@@ -18,7 +18,7 @@ namespace Pong
 		public:
 			~TcpServer()
 			{
-				StopListening();
+				TcpServer::StopListening();
 			}
 
 			void StartListeningAsync(int port) override{

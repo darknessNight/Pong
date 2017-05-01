@@ -9,10 +9,12 @@ namespace ServerUnitTests
 	{
 	public:
 		
+		/*
 		TEST_METHOD(TestMethod1)
 		{
 			// TODO: Your test code here
 		}
+		*/
 
 	};
 }

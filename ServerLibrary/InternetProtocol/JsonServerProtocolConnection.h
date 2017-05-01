@@ -1,27 +1,98 @@
 #pragma once
 #include <map>
 #include "ProtocolConnections.h"
-#include "../IoC.h"
+#include <json.hpp>
+
+using json = nlohmann::json;
 
 namespace Pong
 {
 	namespace Internet
 	{
-		class JsonServerProtocolConnection: public ServerProtocolConnection
+		class JsonServerProtocolConnection : public ServerProtocolConnection
 		{
 			std::map<unsigned, std::shared_ptr<Connection>> users;
+			std::map<unsigned, unsigned> usersIds;
 		public:
 			JsonServerProtocolConnection()
 			{
 
 			}
 
-			virtual unsigned AddUserConnectionAndGetId(std::shared_ptr<Connection>) = 0;
-			virtual void SendObjectsToAll(std::vector<ConnectionObject> objects) = 0;
-			virtual void SendObjectsToUser(std::vector<ConnectionObject> objects, std::shared_ptr<Connection>) = 0;
-			virtual std::vector<UserActionTypes> GetActionsForUser(std::shared_ptr<Connection>) = 0;
-			virtual std::vector<UserActionTypes> GetActionsForUserId(unsigned id) = 0;
-			virtual std::vector<std::pair<unsigned, std::vector<UserActionTypes>>> GetAllUsersActions() = 0;
+		private:
+			void SendIdToUser(std::shared_ptr<Connection> user)
+			{
+				json message;
+				message["playerId"] = usersIds[user->GetId()];
+				auto data = message.dump();
+				std::vector<unsigned char> bytes(data.begin(), data.end());
+				bytes.push_back(0);
+				user->SendBytes(bytes);
+			}
+
+		public:
+			unsigned AddUserConnectionAndGetId(std::shared_ptr<Connection> user) override
+			{
+				users[user->GetId()] = user;
+				if(usersIds.find(user->GetId())==usersIds.end())
+					usersIds[user->GetId()] = users.size() - 1;
+
+				SendIdToUser(user);
+
+				return user->GetId();
+			};
+
+			void SendObjectsToAll(std::vector<ConnectionObject> objects) override
+			{
+				for (auto user : users)
+					SendObjectsToUser(objects, user.second);
+			};
+
+			void SendObjectsToUser(const std::vector<ConnectionObject>& objects, std::shared_ptr<Connection> user) override
+			{
+				json message;
+				for (auto obj : objects)
+					message.push_back(json{ 
+						{"x",obj.x},
+						{"y", obj.y},
+						{"type", static_cast<int>(obj.type)},
+						{"lives", obj.lives}
+				});
+				auto data=message.dump();
+
+				std::vector<unsigned char> bytes(data.begin(),data.end());
+				bytes.push_back(0);
+				user->SendBytes(bytes);
+			}
+
+			std::vector<UserMove> GetActionsForUser(std::shared_ptr<Connection> user) override
+			{
+				auto data=user->ReadBytesToDelimiter(0);
+				std::string message = reinterpret_cast<char*>(data.data());
+
+				json object = json::parse(message.begin(), message.end());
+
+				std::vector<UserMove> result;
+				for(auto el:object)
+				{
+					UserMove move;
+					move.moveType = el["move"];
+					move.time = std::chrono::microseconds(el["time"]);
+					result.push_back(move);
+				}
+
+				return result;
+			}
+
+			std::vector<UserMove> GetActionsForUserId(unsigned id) override
+			{
+				return GetActionsForUser(users[id]);
+			}
+
+			virtual std::shared_ptr<Connection> GetUserForId(unsigned id)
+			{
+				return users[id];
+			}
 		};
 	}
 }
