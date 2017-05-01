@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\InternetProtocol">
+      <UniqueIdentifier>{1e6411ed-4eb8-4f61-bd39-5f4e29363c86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -21,9 +24,45 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="InternetProtocol\ConstantsAndStructs.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
+    <ClInclude Include="InternetProtocol\ProtocolConnections.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
+    <ClInclude Include="InternetProtocol\Connections.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
+    <ClInclude Include="IoC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InternetProtocol\ConnectionFactory.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
+    <ClInclude Include="InternetProtocol\TcpConnectionFactory.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
+    <ClInclude Include="InternetProtocol\JsonServerProtocolConnection.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
+    <ClInclude Include="InternetProtocol\TcpConnection.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
+    <ClInclude Include="InternetProtocol\TcpServer.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
+    <ClInclude Include="InternetProtocol\JsonClientProtocolConnection.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IoC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InternetProtocol\TcpConnections.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
