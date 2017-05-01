@@ -1,5 +1,6 @@
 #pragma once
 #include "ProtocolConnections.h"
+#include "TcpConnectionFactory.h"
 #include <thread>
 #include <json.hpp>
 
@@ -101,6 +102,15 @@ namespace Pong
 
 			UserIds GetMyId() override{
 				return myId;
+			}
+		};
+
+		class JsonClientProtocolConnectionFactory:public ClientProtocolConnectionFactory
+		{
+			TcpConnectionFactory factory;
+		public:
+			std::shared_ptr<ClientProtocolConnection> GetConnectionFor(std::string ip, int port) override{
+				return std::make_shared<JsonClientProtocolConnection>(factory.GetConnectionFor(ip, port));
 			}
 		};
 	}
