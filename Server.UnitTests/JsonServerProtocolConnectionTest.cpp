@@ -32,9 +32,14 @@ namespace Pong
 			void SendBytes(std::vector<byte> bytes) override {
 				sendedMessages.push_back(bytes);
 			}
+			bool IsSomethingToReceive()
+			{
+				return currentMessage < receivedMessages.size();
+			}
 			unsigned GetId() override { return id; }
 			void SetDisconnectAction(std::function<void(Connection*)>) override {}
 			void SetTransmissionErrorAction(std::function<void(Connection*)>) override {}
+			void Abort() {}
 		};
 
 
@@ -173,7 +178,7 @@ namespace Pong
 			{
 				JsonServerProtocolConnection server;
 				auto user1 = std::make_shared<FakeConnection>(1);
-				user1->receivedMessages.push_back(R"([{"move":5,"time":342}])");
+				user1->receivedMessages.push_back(R"({"move":5,"time":342})");
 
 				auto result = server.GetActionsForUser(user1);
 
@@ -187,7 +192,8 @@ namespace Pong
 			{
 				JsonServerProtocolConnection server;
 				auto user1 = std::make_shared<FakeConnection>(1);
-				user1->receivedMessages.push_back(R"([{"move":5,"time":342},{"move":4,"time":32}])");
+				user1->receivedMessages.push_back(R"({"move":5,"time":342})");
+				user1->receivedMessages.push_back(R"({"move":4, "time" : 32})");
 
 				auto result = server.GetActionsForUser(user1);
 

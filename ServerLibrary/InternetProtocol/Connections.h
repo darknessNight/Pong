@@ -22,6 +22,9 @@ namespace Pong
 			virtual std::vector<byte> ReadBytes(unsigned size) = 0;
 			virtual void SendBytes(std::vector<byte> bytes) = 0;
 			virtual unsigned GetId() = 0;
+			virtual bool IsSomethingToReceive() = 0;
+
+			virtual void Abort() = 0;
 
 			virtual void SetDisconnectAction(std::function<void(Connection*)>) = 0;
 			virtual void SetTransmissionErrorAction(std::function<void(Connection*)>) = 0;

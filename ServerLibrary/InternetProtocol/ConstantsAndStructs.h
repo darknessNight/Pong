@@ -35,6 +35,11 @@ namespace Pong
 			float x, y;
 			Type type;
 			unsigned char lives;
+
+			bool operator==(const ConnectionObject& other) const
+			{
+				return x == other.x && y == other.y &&type == other.type&&lives == other.lives;
+			}
 		};
 
 		enum UserActionTypes

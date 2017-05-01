@@ -29,6 +29,20 @@ namespace Pong
 				myId = NextId++;
 			}
 
+			bool IsSomethingToReceive() override
+			{
+				const int bufferSize = 100;
+				byte buffer[bufferSize];
+				std::size_t count;
+				socket.setBlocking(false);
+				auto status = socket.receive(buffer, bufferSize, count);
+
+				for (auto i = 0; i < count / sizeof(byte); i++)
+					lastBuffer.push_back(buffer[i]);
+
+				return status == sf::Socket::Done;
+			}
+
 			std::vector<byte> ReadAllBytes() override
 			{
 				std::vector<byte> received = lastBuffer;
@@ -134,19 +148,23 @@ namespace Pong
 				DoErrorActionIfNeeded(status);
 			}
 
-			virtual unsigned GetId()
+			unsigned GetId() override
 			{
 				return myId;
 			}
 
-			virtual void SetDisconnectAction(std::function<void(Connection*)> func)
+			void SetDisconnectAction(std::function<void(Connection*)> func) override
 			{
 				disconnectAction = func;
 			}
 
-			virtual void SetTransmissionErrorAction(std::function<void(Connection*)> func)
+			void SetTransmissionErrorAction(std::function<void(Connection*)> func) override
 			{
 				errorAction = func;
+			}
+
+			void Abort() override{
+				socket.disconnect();
 			}
 		};
 	}

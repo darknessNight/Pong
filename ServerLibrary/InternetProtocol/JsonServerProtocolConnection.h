@@ -34,7 +34,7 @@ namespace Pong
 			unsigned AddUserConnectionAndGetId(std::shared_ptr<Connection> user) override
 			{
 				users[user->GetId()] = user;
-				if(usersIds.find(user->GetId())==usersIds.end())
+				if (usersIds.find(user->GetId()) == usersIds.end())
 					usersIds[user->GetId()] = users.size() - 1;
 
 				SendIdToUser(user);
@@ -52,35 +52,33 @@ namespace Pong
 			{
 				json message;
 				for (auto obj : objects)
-					message.push_back(json{ 
+					message.push_back(json{
 						{"x",obj.x},
 						{"y", obj.y},
 						{"type", static_cast<int>(obj.type)},
 						{"lives", obj.lives}
 				});
-				auto data=message.dump();
+				auto data = message.dump();
 
-				std::vector<unsigned char> bytes(data.begin(),data.end());
+				std::vector<unsigned char> bytes(data.begin(), data.end());
 				bytes.push_back(0);
 				user->SendBytes(bytes);
 			}
 
 			std::vector<UserMove> GetActionsForUser(std::shared_ptr<Connection> user) override
 			{
-				auto data=user->ReadBytesToDelimiter(0);
-				std::string message = reinterpret_cast<char*>(data.data());
-
-				json object = json::parse(message.begin(), message.end());
-
 				std::vector<UserMove> result;
-				for(auto el:object)
-				{
+				while (user->IsSomethingToReceive()) {
+					auto data = user->ReadBytesToDelimiter(0);
+					std::string message = reinterpret_cast<char*>(data.data());
+
+					json object = json::parse(message.begin(), message.end());
+
 					UserMove move;
-					move.moveType = el["move"];
-					move.time = std::chrono::microseconds(el["time"]);
+					move.moveType = object["move"];
+					move.time = std::chrono::microseconds(object["time"]);
 					result.push_back(move);
 				}
-
 				return result;
 			}
 

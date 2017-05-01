@@ -19,10 +19,16 @@ namespace Pong
 		class ClientProtocolConnection abstract
 		{
 		public:
-			virtual std::vector<ConnectionObject> GetAllObjectsFromServer() = 0;
+			virtual std::vector<std::vector<ConnectionObject>> GetAllObjectsFromServer() = 0;
 			virtual std::vector<ConnectionObject> GetLatestObjectsFromServer() = 0;
 			virtual void SendActionToServer(UserActionTypes action) = 0;
 			virtual UserIds GetMyId() = 0;
+		};
+
+		class ClientProtocolConnectionFactory
+		{
+		public:
+			virtual std::shared_ptr<ClientProtocolConnection> GetConnectionFor(std::string ip, int port) = 0;
 		};
 	}
 }
