@@ -66,7 +66,7 @@ namespace Pong
 			{
 				auto fakeConnection = std::make_shared<FakeConnection>(1);
 				fakeConnection->receivedMessages
-					.push_back(R"R([{"lives":3,"type":2,"x":0.5,"y":0.0},{"lives":4,"type":1,"x":0.25,"y":0.125}])R");
+					.push_back(R"R([{"lives":3,"type":2,"x":0.5,"y":0.0,"shielded":true},{"lives":4,"type":1,"x":0.25,"y":0.125,"shielded":false}])R");
 				JsonClientProtocolConnection client(fakeConnection);
 
 				std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -74,9 +74,9 @@ namespace Pong
 				auto result = client.GetLatestObjectsFromServer();
 
 				std::vector<ConnectionObject> expected{ {
-						0.5f,0.f, ConnectionObject::Type::BallRed,3
+						0.5f,0.f, ConnectionObject::Type::BallRed,3,true
 					},{
-						0.25f,0.125f, ConnectionObject::Type::BallCommon,4
+						0.25f,0.125f, ConnectionObject::Type::BallCommon,4,false
 					} };
 
 				Assert::IsTrue(expected==result);
@@ -86,9 +86,9 @@ namespace Pong
 			{
 				auto fakeConnection = std::make_shared<FakeConnection>(1);
 				fakeConnection->receivedMessages
-					.push_back(R"R([{"lives":3,"type":4,"x":0.5,"y":0.0},{"lives":4,"type":4,"x":0.25,"y":0.125}])R");
+					.push_back(R"R([{"lives":3,"type":4,"x":0.5,"y":0.0,"shielded":true},{"lives":4,"type":4,"x":0.25,"y":0.125,"shielded":false}])R");
 				fakeConnection->receivedMessages
-					.push_back(R"R([{"lives":3,"type":2,"x":0.5,"y":0.0},{"lives":4,"type":1,"x":0.25,"y":0.125}])R");				
+					.push_back(R"R([{"lives":3,"type":2,"x":0.5,"y":0.0,"shielded":true},{"lives":4,"type":1,"x":0.25,"y":0.125,"shielded":false}])R");				
 				JsonClientProtocolConnection client(fakeConnection);
 
 				std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -96,9 +96,9 @@ namespace Pong
 				auto result = client.GetLatestObjectsFromServer();
 
 				std::vector<ConnectionObject> expected{ {
-						0.5f,0.f, ConnectionObject::Type::BallRed,3
+						0.5f,0.f, ConnectionObject::Type::BallRed,3,true
 					},{
-						0.25f,0.125f, ConnectionObject::Type::BallCommon,4
+						0.25f,0.125f, ConnectionObject::Type::BallCommon,4,false
 					} };
 
 				Assert::IsTrue(expected == result);

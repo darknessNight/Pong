@@ -69,6 +69,7 @@ namespace Pong
 								obj.y = el["y"];
 								obj.type = el["type"];
 								obj.lives = el["lives"];
+								obj.shielded = el["shielded"];
 								objects.push_back(obj);
 							}
 							messages.push_back(objects);

@@ -117,12 +117,12 @@ namespace Pong
 				auto user = std::make_shared<FakeConnection>(1);
 				std::vector<ConnectionObject> data;
 				data.push_back({
-					0.4f,0.f, ConnectionObject::Type::BallRed,3
+					0.5f,0.f, ConnectionObject::Type::BallRed,3,false
 				});
 
 				server.SendObjectsToUser(data, user);
 
-				std::string expected = R"([{"lives":3,"type":2,"x":0.400000005960464,"y":0.0}])";
+				std::string expected = R"R([{"lives":3,"shielded":false,"type":2,"x":0.5,"y":0.0}])R";
 
 				Assert::AreEqual<unsigned>(1u, user->sendedMessages.size());
 				Assert::AreEqual(expected.c_str(), reinterpret_cast<char*>(user->sendedMessages[0].data()));
@@ -134,15 +134,15 @@ namespace Pong
 
 				auto user = std::make_shared<FakeConnection>(1);
 				std::vector<ConnectionObject> data{ {
-					0.5f,0.f, ConnectionObject::Type::BallRed,3
+					0.5f,0.f, ConnectionObject::Type::BallRed,3,false
 				},{
-					0.25f,0.125f, ConnectionObject::Type::BallCommon,4
+					0.25f,0.125f, ConnectionObject::Type::BallCommon,4,true
 				} };
 
 
 				server.SendObjectsToUser(data, user);
 
-				std::string expected = R"R([{"lives":3,"type":2,"x":0.5,"y":0.0},{"lives":4,"type":1,"x":0.25,"y":0.125}])R";
+				std::string expected = R"R([{"lives":3,"shielded":false,"type":2,"x":0.5,"y":0.0},{"lives":4,"shielded":true,"type":1,"x":0.25,"y":0.125}])R";
 
 				Assert::AreEqual<unsigned>(1u, user->sendedMessages.size());
 				Assert::AreEqual(expected.c_str(), reinterpret_cast<char*>(user->sendedMessages[0].data()));
@@ -155,9 +155,9 @@ namespace Pong
 				auto user1 = std::make_shared<FakeConnection>(1);
 				auto user2 = std::make_shared<FakeConnection>(2);
 				std::vector<ConnectionObject> data{ {
-						0.5f,0.f, ConnectionObject::Type::BallRed,3
+						0.5f,0.f, ConnectionObject::Type::BallRed,3,false
 					},{
-						0.25f,0.125f, ConnectionObject::Type::BallCommon,4
+						0.25f,0.125f, ConnectionObject::Type::BallCommon,4,true
 					} };
 				server.AddUserConnectionAndGetId(user1);
 				server.AddUserConnectionAndGetId(user2);
@@ -166,7 +166,7 @@ namespace Pong
 
 				server.SendObjectsToAll(data);
 
-				std::string expected = R"R([{"lives":3,"type":2,"x":0.5,"y":0.0},{"lives":4,"type":1,"x":0.25,"y":0.125}])R";
+				std::string expected = R"R([{"lives":3,"shielded":false,"type":2,"x":0.5,"y":0.0},{"lives":4,"shielded":true,"type":1,"x":0.25,"y":0.125}])R";
 
 				Assert::AreEqual<unsigned>(1u, user1->sendedMessages.size(), L"User1");
 				Assert::AreEqual(expected.c_str(), reinterpret_cast<char*>(user1->sendedMessages[0].data()), L"User1");
