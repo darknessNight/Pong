@@ -75,6 +75,9 @@
     <ClInclude Include="ProtocolConnectionView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -56,7 +56,8 @@ namespace Pong
 						{"x",obj.x},
 						{"y", obj.y},
 						{"type", static_cast<int>(obj.type)},
-						{"lives", obj.lives}
+						{"lives", obj.lives},
+						{"shielded",obj.shielded}
 				});
 				auto data = message.dump();
 

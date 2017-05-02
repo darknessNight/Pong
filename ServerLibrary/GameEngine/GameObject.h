@@ -15,7 +15,7 @@ namespace Pong
 			virtual ~GameObject() = default;
 
 			typedef Internet::ConnectionObject::Type Type;
-		private:
+		protected:
 			friend class GameEngine;
 			std::shared_ptr<std::shared_mutex> changeMutex=std::make_shared<std::shared_mutex>();
 			std::shared_ptr<std::shared_mutex> positionMutex = std::make_shared<std::shared_mutex>();

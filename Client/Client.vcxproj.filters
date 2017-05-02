@@ -27,12 +27,27 @@
     <ClInclude Include="Tests\Tests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Client.cpp">
+    <ClCompile Include="Tests\Test1.cpp">
+      <Filter>Source Files\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Tests.cpp">
+      <Filter>Source Files\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Template.cpp">
+      <Filter>Source Files\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Tests\Test1.cpp">

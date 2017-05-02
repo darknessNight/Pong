@@ -2,6 +2,7 @@
 #include "InternetProtocol/JsonServerProtocolConnection.h"
 #include "InternetProtocol/TcpServer.h"
 #include "GameEngine/View.h"
+#include "PlayerObject.h"
 
 namespace Pong
 {
@@ -20,7 +21,12 @@ namespace Pong
 			std::vector<Internet::ConnectionObject> connectionObjects;
 			for(auto el:objects)
 			{
+
 				Internet::ConnectionObject obj;
+				if(IsPlayer(el))
+				{
+					obj.shielded = static_cast<PlayerObject*>(el.get())->IsShielded();
+				}
 				obj.lives = el->GetLives();
 				obj.type = el->GetType();
 				obj.x = el->GetPos().x;
@@ -29,6 +35,13 @@ namespace Pong
 			}
 
 			protocolServer->SendObjectsToAll(connectionObjects);
+		}
+	private:
+		static bool IsPlayer(std::shared_ptr<Pong::GameEngine::GameObject> el)
+		{
+			return el->GetType() == Internet::ConnectionObject::Player1 ||
+				el->GetType() == Internet::ConnectionObject::Player2 ||
+				el->GetType() == Internet::ConnectionObject::Player3;
 		}
 	};
 }
