@@ -127,6 +127,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="GameEngine\Helpers.h" />
+    <ClInclude Include="GameEngine\shared_mutex_lock_priority.h" />
     <ClInclude Include="InternetProtocol\ConnectionFactory.h" />
     <ClInclude Include="InternetProtocol\ConstantsAndStructs.h" />
     <ClInclude Include="InternetProtocol\Connections.h" />

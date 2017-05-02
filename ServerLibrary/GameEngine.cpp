@@ -1,6 +1,10 @@
 #include"stdafx.h"
 #include "GameEngine\GameEngine.h"
 #include "GameEngine\GameObject.h"
+#include "GameEngine/Helpers.h"
+
+using Pong::GameEngine::Pointf;
+
 //
 /*
 		^ -y
@@ -20,21 +24,7 @@
 
 using namespace Pong::GameEngine;
 
-void Pong::GameEngine::GameEngine::addObject(std::shared_ptr<GameObject> obj)
-{
-	this->allObjects.push_back(obj);
-}
-
-std::shared_ptr<GameObject> Pong::GameEngine::GameEngine::CreateObject(Pointf pos, Pointf size, GameObject::Type type)
-{
-	std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(pos, size, type);
-	addObject(obj);
-	return obj;
-}
-
-
-
-bool Pong::GameEngine::GameEngine::MoveObject(std::shared_ptr<GameObject> obj, Pointf shift)
+bool  GameEngine::MoveObject(std::shared_ptr<GameObject> obj, Pointf shift)
 {
 	if (!WillCollide(obj, shift)) {
 		GameObject* object = obj.get();

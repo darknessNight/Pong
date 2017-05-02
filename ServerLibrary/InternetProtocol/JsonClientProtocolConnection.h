@@ -3,6 +3,7 @@
 #include "TcpConnectionFactory.h"
 #include <thread>
 #include <json.hpp>
+#include <mutex>
 
 using json = nlohmann::json;
 
@@ -28,6 +29,7 @@ namespace Pong
 			bool working;
 			std::vector<std::vector<ConnectionObject>> messages;
 			std::shared_ptr<Clock> myClock = std::make_shared<Clock>();
+			std::mutex messagesMutex;
 		public:
 			explicit JsonClientProtocolConnection(std::shared_ptr<Connection> connection):connection(connection),
 				myThread([&]() {ReceivingLoop(); })
@@ -46,6 +48,31 @@ namespace Pong
 				myClock = clock;
 			}
 		protected:
+			void ProcessMessage(std::vector<unsigned char> result)
+			{
+				if(result.size()>0)
+				{
+					auto message = json::parse(result.begin(), result.end());
+					if (message.find("playerId") != message.end())
+						myId = (UserIds)((int)message["playerId"]+(int)UserIds::Player1);
+					else
+					{
+						std::vector<ConnectionObject> objects;
+						for(auto el:message)
+						{
+							ConnectionObject obj;
+							obj.x = el["x"];
+							obj.y = el["y"];
+							obj.type = el["type"];
+							obj.lives = el["lives"];
+							objects.push_back(obj);
+						}
+						std::lock_guard<std::mutex> lock(messagesMutex);
+						messages.push_back(objects);
+					}
+				}
+			}
+
 			void ReceivingLoop()
 			{
 				while (working)
@@ -54,36 +81,21 @@ namespace Pong
 					try {
 						result = connection->ReadBytesToDelimiter(0);
 					}catch(...){}
-					if(result.size()>0)
-					{
-						auto message = json::parse(result.begin(), result.end());
-						if (message.find("playerId") != message.end())
-							myId = (UserIds)((int)message["playerId"]+(int)UserIds::Player1);
-						else
-						{
-							std::vector<ConnectionObject> objects;
-							for(auto el:message)
-							{
-								ConnectionObject obj;
-								obj.x = el["x"];
-								obj.y = el["y"];
-								obj.type = el["type"];
-								obj.lives = el["lives"];
-								objects.push_back(obj);
-							}
-							messages.push_back(objects);
-						}
-					}
+					ProcessMessage(result);
 				}
 			}
 		public:
 			std::vector<std::vector<ConnectionObject>> GetAllObjectsFromServer() override{
+				std::lock_guard<std::mutex> lock(messagesMutex);
 				auto all = messages;
 				messages.clear();
 				return all;
 			}
 
 			std::vector<ConnectionObject> GetLatestObjectsFromServer() override{
+				std::lock_guard<std::mutex> lock(messagesMutex);
+				if (messages.size() <= 0)
+					return std::vector<ConnectionObject>();
 				auto latest = messages.back();
 				messages.clear();
 				return latest;
