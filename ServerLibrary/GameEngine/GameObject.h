@@ -22,6 +22,7 @@ namespace Pong
 			Pointf position, size;
 			Type type;
 			PhysicParams physic;
+			int lives=1;
 		protected:
 			virtual void SetPos(Pointf p)
 			{
@@ -45,6 +46,12 @@ namespace Pong
 			{
 				std::lock_guard<std::shared_mutex> lock(*changeMutex);
 				physic = params;
+			}
+
+			virtual void SetLives(int lives)
+			{
+				std::lock_guard<std::shared_mutex> lock(*changeMutex);
+				this->lives = lives;
 			}
 		public:
 			GameObject(const GameObject& other)
@@ -75,6 +82,20 @@ namespace Pong
 				return Type::Test;
 			}
 
+			virtual int GetLives() const
+			{
+				std::shared_lock<std::shared_mutex> lock(*changeMutex);
+				return lives;
+			}
+
+			virtual void DecreaseLives()
+			{
+				std::lock_guard<std::shared_mutex> lock(*changeMutex);
+				lives--;
+				if (lives == 0)
+					KillObject();
+			}
+
 			GameObject& operator=(const GameObject& other){
 				std::lock_guard<std::shared_mutex> lock(*changeMutex);
 				std::shared_lock<std::shared_mutex> lockOther(*other.changeMutex);
@@ -92,6 +113,11 @@ namespace Pong
 			bool operator!=(const GameObject& other) const
 			{
 				return !operator==(other);
+			}
+
+			virtual void KillObject()
+			{
+				
 			}
 
 			virtual bool IsCollideWith(std::shared_ptr<GameObject> otherObj)

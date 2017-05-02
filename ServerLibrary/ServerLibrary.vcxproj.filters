@@ -72,6 +72,9 @@
     <ClInclude Include="GameEngine\View.h">
       <Filter>Header Files\GameEngine</Filter>
     </ClInclude>
+    <ClInclude Include="ProtocolConnectionView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -80,8 +83,6 @@
     <ClCompile Include="IoC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InternetProtocol\TcpConnections.cpp">
-    </ClCompile>
     <ClCompile Include="GameEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -89,6 +90,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LinearFunction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InternetProtocol\TcpConnections.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
