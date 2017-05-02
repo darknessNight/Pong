@@ -15,6 +15,9 @@
     </Filter>
     <Filter Include="Header Files\InternetProtocol">
       <UniqueIdentifier>{1e6411ed-4eb8-4f61-bd39-5f4e29363c86}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="Header Files\GameEngine">
+      <UniqueIdentifier>{4656ec35-6d58-4abe-8d8a-5c0ff2ae2ac0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +56,12 @@
     </ClInclude>
     <ClInclude Include="InternetProtocol\JsonClientProtocolConnection.h">
       <Filter>Header Files\InternetProtocol</Filter>
+	</ClInclude>
+    <ClInclude Include="GameEngine\GameObject.h">
+      <Filter>Header Files\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\GameEngine.h">
+      <Filter>Header Files\GameEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +72,14 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="InternetProtocol\TcpConnections.cpp">
+	</ClCompile>
+    <ClCompile Include="GameEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LinearFunction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
