@@ -1,4 +1,5 @@
 #pragma once
+#include <chrono>
 
 namespace Pong
 {
@@ -35,6 +36,11 @@ namespace Pong
 			Type type;
 			unsigned char lives;
 			bool shielded;
+      
+			bool operator==(const ConnectionObject& other) const
+			{
+				return x == other.x && y == other.y &&type == other.type&&lives == other.lives && shielded==other.shielded;
+			}
 		};
 
 		enum UserActionTypes
@@ -45,6 +51,17 @@ namespace Pong
 			StopMoveRight,
 			Shield,
 			Shoot
+		};
+
+		struct UserMove
+		{
+			UserActionTypes moveType;
+			std::chrono::microseconds time;
+
+			bool operator==(const UserMove& other) const
+			{
+				return moveType == other.moveType && time == other.time;
+			}
 		};
 	}
 }

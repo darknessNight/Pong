@@ -1,6 +1,6 @@
 #pragma once
 #include "ConnectionFactory.h"
-
+#include "TcpConnection.h"
 
 namespace Pong
 {
@@ -9,8 +9,9 @@ namespace Pong
 		class TcpConnectionFactory: public ConnectionFactory
 		{
 		public:
-			virtual std::shared_ptr<Connection> GetConnectionFor(std::string ip, int port) {
-				return nullptr;
+			std::shared_ptr<Connection> GetConnectionFor(std::string ip, int port) override
+			{
+				return std::make_shared<TcpConnection>(ip, port);
 			};
 		};
 	}

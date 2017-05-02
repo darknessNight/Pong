@@ -45,12 +45,24 @@
     <ClInclude Include="InternetProtocol\JsonServerProtocolConnection.h">
       <Filter>Header Files\InternetProtocol</Filter>
     </ClInclude>
+    <ClInclude Include="InternetProtocol\TcpConnection.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
+    <ClInclude Include="InternetProtocol\TcpServer.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
+    <ClInclude Include="InternetProtocol\JsonClientProtocolConnection.h">
+      <Filter>Header Files\InternetProtocol</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IoC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InternetProtocol\TcpConnections.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
