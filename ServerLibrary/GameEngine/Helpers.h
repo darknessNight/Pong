@@ -30,6 +30,11 @@ namespace Pong {
 
 		};
 
+		struct PhysicParams
+		{
+			Pointf velocity;
+			float avgVelocity;
+		};
 
 		struct Corners {
 			Pointf upperLeft = { 0,0 };
@@ -58,7 +63,7 @@ namespace Pong {
 			LinearFunctions_Deadzones(Pong::GameEngine::Pointf pos, Pointf size, Pointf shift);
 			LinearFunctions_Deadzones();
 
-			void setNewFunktionVariables(Pointf pos, Pointf size, Pointf shift);
+			void setNewFunctionVariables(Pointf pos, Pointf size, Pointf shift);
 
 			/*
 			WARNING! F1 and F2 return x instead of y regardless of the passed

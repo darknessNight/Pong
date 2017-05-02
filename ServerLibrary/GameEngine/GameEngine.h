@@ -4,18 +4,13 @@
 #include "GameObject.h"
 #include "shared_mutex_lock_priority.h"
 #include "Helpers.h"
+#include "View.h"
 
 namespace Pong
 {
 	namespace GameEngine
 	{
 		using darknessNight::Multithreading::shared_mutex_lock_priority;
-
-		class View
-		{
-		public:
-			virtual void DisplayObjects(const std::vector<std::shared_ptr<GameObject>>& objects){}
-		};
 
 		class GameEngine
 		{
@@ -32,6 +27,7 @@ namespace Pong
 			bool checkIfPositionsAreEqual(GameObject* obj, Corners cornersOfOcject);
 
 		public:
+			virtual ~GameEngine() = default;
 			bool WillCollide(std::shared_ptr<GameObject> obj, Pointf shift);
 			bool MoveObject(std::shared_ptr<GameObject> obj, Pointf shift);
 

@@ -1,12 +1,11 @@
 #include"stdafx.h"
-#include"GameEngine\GameEngine.h"
-#include"GameEngine\GameObject.h"
+#include "GameEngine/GameEngine.h"
 
 using namespace Pong::GameEngine;
 
 LinearFunctions_Deadzones::LinearFunctions_Deadzones(Pointf pos, Pointf size, Pointf shift)
 {
-	this->setNewFunktionVariables(pos, size, shift);
+	this->setNewFunctionVariables(pos, size, shift);
 	this->y = 0;
 	this->x = 0;
 }
@@ -20,7 +19,7 @@ LinearFunctions_Deadzones::LinearFunctions_Deadzones()
 	this->x = 0;
 }
 
-void LinearFunctions_Deadzones::setNewFunktionVariables(Pointf pos, Pointf size, Pointf shift)
+void LinearFunctions_Deadzones::setNewFunctionVariables(Pointf pos, Pointf size, Pointf shift)
 {
 	this->functionType = determineFunctionType(shift);
 	if (functionType == HORIZONTAL) {	//y1 = b1; y2 = b2
