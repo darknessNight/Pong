@@ -23,7 +23,7 @@ namespace Pong
 			Type type;
 			PhysicParams physic;
 			int lives=1;
-		protected:
+		public:
 			virtual void SetPos(Pointf p)
 			{
 				std::lock_guard<std::shared_mutex> lock(*changeMutex);
