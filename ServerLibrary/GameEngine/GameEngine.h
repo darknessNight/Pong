@@ -44,7 +44,7 @@ namespace Pong
 			}
 
 			bool WillCollide(std::shared_ptr<GameObject> obj, Pointf shift);
-			bool CheckWillObjectsCollide(Corners cornersOfObject, LinearFunctions_Deadzones DeadZone, std::vector<std::shared_ptr<GameObject>>::value_type object);
+			bool CheckWillObjectsCollide(Corners cornersOfObject, LinearFunctions_Deadzones DeadZone, std::shared_ptr<GameObject> object);
 			bool MoveObject(std::shared_ptr<GameObject> obj, Pointf shift);
 
 			std::shared_ptr<GameObject> CreateObject(Pointf pos, Pointf size, GameObject::Type type)

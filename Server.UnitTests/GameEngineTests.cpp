@@ -136,6 +136,17 @@ namespace Pong
 				Assert::IsTrue(result);
 			}
 
+			TEST_METHOD(WillCollide_HasTwoCollideObjects0XAxisMinusMinimalShift_CheckReturnTrue)
+			{
+				auto gameEngine = PrepareGameEngine();
+
+				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::DeadWall);
+
+				auto result = gameEngine->WillCollide(o2, { -1,0 });
+				Assert::IsTrue(result);
+			}
+
 			TEST_METHOD(WillCollide_HasTwoCollideObjects0XAxisPlusShift_CheckReturnTrue)
 			{
 				auto gameEngine = PrepareGameEngine();
@@ -143,7 +154,7 @@ namespace Pong
 				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
 				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::DeadWall);
 
-				auto result = gameEngine->WillCollide(o1, { 11,0 });
+				auto result = gameEngine->WillCollide(o1, { 1,0 });
 				Assert::IsTrue(result);
 			}
 
@@ -154,7 +165,7 @@ namespace Pong
 				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
 				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::DeadWall);
 
-				auto result = gameEngine->WillCollide(o1, { 0,11 });
+				auto result = gameEngine->WillCollide(o1, { 0,1 });
 				Assert::IsTrue(result);
 			}
 
@@ -165,7 +176,7 @@ namespace Pong
 				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
 				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::DeadWall);
 
-				auto result = gameEngine->WillCollide(o2, { 0,-11 });
+				auto result = gameEngine->WillCollide(o2, { 0,-1 });
 				Assert::IsTrue(result);
 			}
 

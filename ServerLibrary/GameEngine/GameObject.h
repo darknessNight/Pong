@@ -151,11 +151,13 @@ namespace Pong
 				auto mySize = object->GetSize();
 				auto physic = GetPhysic();
 
-				if(myPos.x<=objPos.x+(objSize.x*1.1) || myPos.x+mySize.x*1.1>=objPos.x)
+				
+					if (myPos.y>objPos.y + objSize.y || myPos.y + mySize.y<objPos.y )
 				{
 					physic.velocity.x = -physic.velocity.x;
 				}
-				if (myPos.y <= objPos.y + (objSize.y*1.1) || myPos.y + mySize.y*1.1 >= objPos.y)
+				
+				if (myPos.x>objPos.x + objSize.x || myPos.x + mySize.x<objPos.x )
 				{
 					physic.velocity.y = -physic.velocity.y;
 				}
