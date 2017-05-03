@@ -49,7 +49,7 @@ namespace Pong
 			GameObject::SetLives(PlayerInitLives);
 		}
 
-		GameEngine::Pointf GetPosFromId(Internet::UserIds id)
+		static GameEngine::Pointf GetPosFromId(Internet::UserIds id)
 		{
 			if (id == Internet::Player1)
 			{
@@ -63,9 +63,10 @@ namespace Pong
 			{
 				return { 0,BoardHeight / 2 - Consts::PLAYER_WIDTH / 2 };
 			}
+			return {};
 		}
 
-		GameEngine::Pointf GetSizeFromId(Internet::UserIds id)
+		static GameEngine::Pointf GetSizeFromId(Internet::UserIds id)
 		{
 			if (id == Internet::Player1)
 			{
@@ -79,6 +80,7 @@ namespace Pong
 			{
 				return { Consts::BALL_RADIUS,Consts::PLAYER_WIDTH };
 			}
+			return {};
 		}
 
 		bool IsShielded() const

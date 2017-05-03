@@ -37,6 +37,7 @@ namespace Pong {
 					KillObject();
 				}
 			}
+			DecreaseLives();
 			GameObject::CollideAction(other);
 		}
 
