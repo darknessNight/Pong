@@ -60,25 +60,30 @@ void GameWindow::start() {
 
 			if (event.type == sf::Event::KeyPressed) {
 				if (event.key.code == sf::Keyboard::Up) {
-
+					if (!pressed[sf::Keyboard::Up]) {
+						connection->SendActionToServer(Pong::Internet::UserActionTypes::Shoot);
+						pressed[sf::Keyboard::Up] = true;
+					}
 				}
 				else if (event.key.code == sf::Keyboard::Down) {
-
 				}
 				else if (event.key.code == sf::Keyboard::Left) {
-					if (!pressed[sf::Keyboard::Left]) {
+					if (!pressed[sf::Keyboard::Left] && !pressed[sf::Keyboard::Right]) {
 						connection->SendActionToServer(Pong::Internet::UserActionTypes::StartMoveLeft);
 						pressed[sf::Keyboard::Left] = true;
 					}
 				}
 				else if (event.key.code == sf::Keyboard::Right) {
-					if (!pressed[sf::Keyboard::Right]) {
+					if (!pressed[sf::Keyboard::Left] && !pressed[sf::Keyboard::Right]) {
 						connection->SendActionToServer(Pong::Internet::UserActionTypes::StartMoveRight);
 						pressed[sf::Keyboard::Right] = true;
 					}
 				}
 				else if (event.key.code == sf::Keyboard::Space) {
-
+					if (!pressed[sf::Keyboard::Space]) {
+						connection->SendActionToServer(Pong::Internet::UserActionTypes::Shield);
+						pressed[sf::Keyboard::Space] = true;
+					}
 				}
 				else if (event.key.code == sf::Keyboard::Z) {
 
@@ -87,10 +92,14 @@ void GameWindow::start() {
 
 			if (event.type == sf::Event::KeyReleased) {
 				if (event.key.code == sf::Keyboard::Up) {
-
+					if (pressed[sf::Keyboard::Up]) {
+						pressed[sf::Keyboard::Up] = false;
+					}
 				}
-				else if (event.key.code == sf::Keyboard::Down) {
-
+				else if (event.key.code == sf::Keyboard::Space) {
+					if (pressed[sf::Keyboard::Space]) {
+						pressed[sf::Keyboard::Space] = false;
+					}
 				}
 				else if (event.key.code == sf::Keyboard::Left) {
 					if (pressed[sf::Keyboard::Left]) {

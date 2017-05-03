@@ -8,12 +8,14 @@ namespace Pong
 {
 	class PlayerObject :public GameEngine::GameObject
 	{
+		std::random_device random;
+		std::uniform_real_distribution<float> dist;
 		std::shared_ptr<Internet::ServerUserPartConnection> connection;
 		const float moveSpeed = PlayerMoveSpeed;
 		bool horizontalMove;
 		int direction;
-		std::chrono::high_resolution_clock::time_point lastShield = std::chrono::high_resolution_clock::time_point::min();
-		std::chrono::high_resolution_clock::time_point lastShoot = std::chrono::high_resolution_clock::time_point::min();
+		std::chrono::high_resolution_clock::time_point lastShield = std::chrono::high_resolution_clock::now();
+		std::chrono::high_resolution_clock::time_point lastShoot = std::chrono::high_resolution_clock::now();
 
 		std::chrono::milliseconds shieldCooldown = PlayerShieldCooldown;
 		std::chrono::milliseconds shootCooldown = PlayerShootCooldown;
@@ -26,9 +28,10 @@ namespace Pong
 		PlayerObject(std::shared_ptr<Internet::ServerUserPartConnection> connection,
 			Internet::UserIds id,
 			std::function<void(std::shared_ptr<GameEngine::GameObject>)> addFunc,
-			std::function<void(std::shared_ptr<GameEngine::GameObject>)> removeFunc)
-			:GameObject(GetPosFromId(id), GetSizeFromId(id), static_cast<Type>(id)),
-			connection(connection), addObjFunc(addFunc), removeObjFunc(removeFunc)
+			std::function<void(std::shared_ptr<GameEngine::GameObject>)> removeFunc) :
+			GameObject(GetPosFromId(id), GetSizeFromId(id), static_cast<Type>(id)),
+			dist(0.00001, MaxBallSpeed), connection(connection), addObjFunc(addFunc),
+			removeObjFunc(removeFunc)
 		{
 			if (id == Internet::Player1)
 			{
@@ -86,7 +89,7 @@ namespace Pong
 		bool IsShielded() const
 		{
 			std::shared_lock<std::shared_mutex> lock(*changeMutex);
-			return false;
+			return shielded;
 		}
 
 		bool IsCollideWith(std::shared_ptr<GameObject> other) override
@@ -95,6 +98,8 @@ namespace Pong
 				return false;
 			return true;
 		}
+
+		void CollideAction(std::shared_ptr<GameObject>)override {}
 
 		void KillObject() override
 		{
@@ -110,12 +115,15 @@ namespace Pong
 				wall = std::make_shared<GameObject>(GameEngine::Pointf{ 0, GetPos().y },
 					GameEngine::Pointf{ BoardWidth,GetSize().y }, Type::Wall);
 				break;
+			default:
+				break;
 			}
 			addObjFunc(wall);
 		}
 
 		void DoScript() override {
-			if (std::chrono::high_resolution_clock::now() - lastShield > shieldTime)
+			auto result = std::chrono::high_resolution_clock::now() - lastShield;
+			if (result > shieldTime && shielded == true)
 				shielded = false;
 
 			auto actions = connection->GetActions();
@@ -126,21 +134,27 @@ namespace Pong
 					switch (el.moveType)
 					{
 					case Internet::Shield:
+						std::cout << "Player: " << GetType() << " IsShielded: " << IsShielded() << " Shield \n";
 						MakeShield();
 						break;
 					case Internet::Shoot:
+						std::cout << "Player: " << GetType() << " Shoot \n";
 						MakeShoot();
 						break;
 					case Internet::StartMoveLeft:
+						std::cout << "Player: " << GetType() << " MoveLeft \n";
 						MoveLeft();
 						break;
 					case Internet::StartMoveRight:
+						std::cout << "Player: " << GetType() << " MoveRight \n";
 						MoveRight();
 						break;
 					case Internet::StopMoveLeft:
+						std::cout << "Player: " << GetType() << " StopLeft \n";
 						StopLeft();
 						break;
 					case Internet::StopMoveRight:
+						std::cout << "Player: " << GetType() << " StopRight \n";
 						StopRight();
 						break;
 					}
@@ -151,7 +165,8 @@ namespace Pong
 	protected:
 		void MakeShield()
 		{
-			if (std::chrono::high_resolution_clock::now() - lastShield > shieldCooldown)
+			auto result = std::chrono::high_resolution_clock::now() - lastShield;
+			if (result > shieldCooldown)
 			{
 				lastShield = std::chrono::high_resolution_clock::now();
 				shielded = true;
@@ -160,17 +175,20 @@ namespace Pong
 
 		void MakeShoot()
 		{
-			if (std::chrono::high_resolution_clock::now() - lastShield > shieldCooldown)
+			auto result = std::chrono::high_resolution_clock::now() - lastShoot;
+			if (result > shootCooldown)
 			{
-				lastShield = std::chrono::high_resolution_clock::now();
+				std::cout << "Try shoot\n";
+				lastShoot = std::chrono::high_resolution_clock::now();
 
-				std::shared_ptr<BadBall> ball = PrepareRedBall();
+				auto ball = PrepareRedBall();
 
 				addObjFunc(ball);
+				std::cout << "Shooted\n";
 			}
 		}
 
-		std::shared_ptr<BadBall> PrepareRedBall() const
+		std::shared_ptr<BadBall> PrepareRedBall()
 		{
 			GameEngine::Pointf pos, velocity;
 			PreparePosAndVelocityForRedBall(pos, velocity);
@@ -179,31 +197,28 @@ namespace Pong
 			return ball;
 		}
 
-		void PreparePosAndVelocityForRedBall(GameEngine::Pointf& pos, GameEngine::Pointf& velocity) const
+		void PreparePosAndVelocityForRedBall(GameEngine::Pointf& pos, GameEngine::Pointf& velocity)
 		{
-			std::default_random_engine random;
-			std::uniform_real_distribution<float> dist(0.001, MaxBallSpeed);
 			if (horizontalMove)
 			{
 				pos = GetPos();
 				pos.y -= 2 * size.y;
 				pos.x += size.x / 2;
-				velocity.x = MaxBallSpeed - dist(random) / 2;
+				velocity.x = MaxBallSpeed/2 - dist(random);
 				velocity.y = -dist(random);
 			}
 			else
 			{
 				pos = GetPos();
 				pos.y += size.y / 2;
-				pos.x -= size.x * 2 * direction;
-				velocity.x = -dist(random)*direction;
-				velocity.y = MaxBallSpeed - dist(random) / 2;
+				pos.x -= size.x * 2 * -direction;
+				velocity.x = dist(random)*direction;
+				velocity.y = MaxBallSpeed/2 - dist(random);
 			}
 		}
 
 		void MoveLeft()
 		{
-			std::cout << "Player: " << GetType() << " MoveLeft \n";
 			if (horizontalMove)
 				SetPhysic({ { -moveSpeed*direction,0 },0 });
 			else SetPhysic({ { 0, -moveSpeed*direction },0 });
@@ -211,7 +226,6 @@ namespace Pong
 
 		void MoveRight()
 		{
-			std::cout << "Player: " << GetType() << " MoveRight \n";
 			if (horizontalMove)
 				SetPhysic({ { moveSpeed*direction,0 },0 });
 			else SetPhysic({ { 0, moveSpeed*direction },0 });
@@ -219,13 +233,11 @@ namespace Pong
 
 		void StopLeft()
 		{
-			std::cout << "Player: " << GetType() << " StopLeft \n";
 			StopRight();
 		}
 
 		void StopRight()
 		{
-			std::cout << "Player: " << GetType() << " StopRight \n";
 			SetPhysic({ {0,0},0 });
 		}
 	};

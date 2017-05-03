@@ -120,6 +120,7 @@ namespace Pong
 
 				threads.push_back(std::make_shared<std::thread>([&]()
 				{
+					std::this_thread::sleep_for(std::chrono::seconds(2));
 					while (working && !pause)
 					{
 						DoPhysic();
