@@ -203,6 +203,7 @@ namespace Pong
 
 		void MoveLeft()
 		{
+			std::cout << "Player: " << GetType() << " MoveLeft \n";
 			if (horizontalMove)
 				SetPhysic({ { -moveSpeed*direction,0 },0 });
 			else SetPhysic({ { 0, -moveSpeed*direction },0 });
@@ -210,6 +211,7 @@ namespace Pong
 
 		void MoveRight()
 		{
+			std::cout << "Player: " << GetType() << " MoveRight \n";
 			if (horizontalMove)
 				SetPhysic({ { moveSpeed*direction,0 },0 });
 			else SetPhysic({ { 0, moveSpeed*direction },0 });
@@ -217,11 +219,13 @@ namespace Pong
 
 		void StopLeft()
 		{
+			std::cout << "Player: " << GetType() << " StopLeft \n";
 			StopRight();
 		}
 
 		void StopRight()
 		{
+			std::cout << "Player: " << GetType() << " StopRight \n";
 			SetPhysic({ {0,0},0 });
 		}
 	};

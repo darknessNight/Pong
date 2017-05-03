@@ -19,15 +19,15 @@ namespace Pong
 		{
 			if (id == Internet::Player1)
 			{
-				return { Consts::BALL_RADIUS,BoardHeight };
+				return { Consts::BALL_RADIUS,BoardHeight*2 };
 			}
 			if (id == Internet::Player2)
 			{
-				return { BoardWidth,Consts::BALL_RADIUS };
+				return { BoardWidth *2,Consts::BALL_RADIUS };
 			}
 			if (id == Internet::Player3)
 			{
-				return { Consts::BALL_RADIUS,BoardHeight };
+				return { Consts::BALL_RADIUS,BoardHeight * 2 };
 			}
 			return {};
 		}
@@ -36,15 +36,15 @@ namespace Pong
 		{
 			if (id == Internet::Player1)
 			{
-				return { BoardWidth,0 };
+				return { BoardWidth+Consts::BALL_RADIUS,-BoardHeight / 2 };
 			}
 			if (id == Internet::Player2)
 			{
-				return { 0,BoardHeight };
+				return { -BoardWidth / 2,BoardHeight+ Consts::BALL_RADIUS };
 			}
 			if (id == Internet::Player3)
 			{
-				return { -Consts::BALL_RADIUS*2, 0 };
+				return { -Consts::BALL_RADIUS, -BoardHeight / 2 };
 			}
 			return {};
 		}

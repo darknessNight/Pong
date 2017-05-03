@@ -69,7 +69,7 @@ namespace Pong
 			}
 			gameEngine->AddObject(std::make_shared<CommonBall>());
 			gameEngine->AddObject(std::make_shared<GameEngine::GameObject>(
-				GameEngine::Pointf{ 0,0 }, GameEngine::Pointf{ BoardWidth,Consts::BALL_RADIUS },
+				GameEngine::Pointf{ -BoardWidth/2 ,0 }, GameEngine::Pointf{ BoardWidth*2,Consts::BALL_RADIUS },
 				GameEngine::GameObject::Type::Wall
 				));
 

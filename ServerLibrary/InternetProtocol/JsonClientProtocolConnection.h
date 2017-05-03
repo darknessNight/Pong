@@ -66,6 +66,7 @@ namespace Pong
 							obj.y = el["y"];
 							obj.type = el["type"];
 							obj.lives = el["lives"];
+							obj.shielded = el["shielded"];
 							objects.push_back(obj);
 						}
 						std::lock_guard<std::mutex> lock(messagesMutex);

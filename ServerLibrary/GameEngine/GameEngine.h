@@ -33,7 +33,7 @@ namespace Pong
 		public:
 			GameEngine()
 			{
-				viewCooldown = std::chrono::milliseconds(100);
+				viewCooldown = std::chrono::milliseconds(1);
 				physicCooldown = std::chrono::milliseconds(10);
 				scriptCooldown = std::chrono::milliseconds(10);
 			}

@@ -37,6 +37,14 @@ void GameWindow::start() {
 	sf::Thread drawingThread(&GameWindow::startDrawing, this);
 	drawingThread.launch();
 
+	std::map<sf::Keyboard::Key, bool> pressed;
+	pressed[sf::Keyboard::Up] = false;
+	pressed[sf::Keyboard::Down] = false;
+	pressed[sf::Keyboard::Left] = false;
+	pressed[sf::Keyboard::Right] = false;
+	pressed[sf::Keyboard::Space] = false;
+	pressed[sf::Keyboard::Z] = false;
+
 	while (IsWindowOpen())
 	{
 
@@ -58,10 +66,16 @@ void GameWindow::start() {
 
 				}
 				else if (event.key.code == sf::Keyboard::Left) {
-					connection->SendActionToServer(Pong::Internet::UserActionTypes::StartMoveLeft);
+					if (!pressed[sf::Keyboard::Left]) {
+						connection->SendActionToServer(Pong::Internet::UserActionTypes::StartMoveLeft);
+						pressed[sf::Keyboard::Left] = true;
+					}
 				}
 				else if (event.key.code == sf::Keyboard::Right) {
-					connection->SendActionToServer(Pong::Internet::UserActionTypes::StartMoveRight);
+					if (!pressed[sf::Keyboard::Right]) {
+						connection->SendActionToServer(Pong::Internet::UserActionTypes::StartMoveRight);
+						pressed[sf::Keyboard::Right] = true;
+					}
 				}
 				else if (event.key.code == sf::Keyboard::Space) {
 
@@ -79,10 +93,16 @@ void GameWindow::start() {
 
 				}
 				else if (event.key.code == sf::Keyboard::Left) {
-					connection->SendActionToServer(Pong::Internet::UserActionTypes::StopMoveLeft);
+					if (pressed[sf::Keyboard::Left]) {
+						connection->SendActionToServer(Pong::Internet::UserActionTypes::StopMoveLeft);
+						pressed[sf::Keyboard::Left] = false;
+					}
 				}
 				else if (event.key.code == sf::Keyboard::Right) {
-					connection->SendActionToServer(Pong::Internet::UserActionTypes::StopMoveRight);
+					if (pressed[sf::Keyboard::Right]) {
+						connection->SendActionToServer(Pong::Internet::UserActionTypes::StopMoveRight);
+						pressed[sf::Keyboard::Right] = false;
+					}
 				}
 			}
 		}
@@ -122,7 +142,15 @@ void GameWindow::startDrawing() {
 		wall.setFillColor(sf::Color::Yellow);
 		this->window.draw(wall);
 
+
+
+		for (auto el : temp)
+		{
+			std::cout << "Object: " << el.type << " pos: " << el.x << " " << el.y << "\n";
+		}
+
 		for (int i = 0; i < temp.size(); i++) {
+
 			if (temp[i].type == Pong::Internet::ConnectionObject::BallCommon) {
 				sf::CircleShape circle(Pong::Consts::BALL_RADIUS*WINDOWSIZE);
 				circle.setPosition(sf::Vector2f(temp[i].x*WINDOWSIZE, temp[i].y*WINDOWSIZE));
@@ -164,6 +192,7 @@ void GameWindow::startDrawing() {
 			if (temp[i].type == Pong::Internet::ConnectionObject::Player2) {
 				if (temp[i].lives > 0) {
 					sf::RectangleShape player1Rect(sf::Vector2f(WINDOWSIZE*Pong::Consts::PLAYER_WIDTH, WINDOWSIZE*Pong::Consts::BALL_RADIUS));
+					std::cout << "Player2 pos: " << temp[i].x << " " << temp[i].y << "\n";
 					player1Rect.setPosition(sf::Vector2f((temp[i].x + Pong::Consts::BALL_RADIUS)*WINDOWSIZE, temp[i].y*WINDOWSIZE));
 					if (temp[i].shielded == true) {
 						player1Rect.setFillColor(sf::Color::Blue);

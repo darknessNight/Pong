@@ -1,6 +1,7 @@
 #include"stdafx.h"
 #include"GameEngine\GameObject.h"
 #include "GameEngine/GameEngine.h"
+#include <iostream>
 
 Pong::GameEngine::GameObject::GameObject(Pointf pos, Pointf size, Type type)
 {
@@ -22,6 +23,10 @@ inline void Pong::GameEngine::GameObject::DoPhysic()
 		shift.x /= duration.count();
 		shift.y /= duration.count();
 
+		/*auto pos = GetPos();
+		pos.x += shift.x;
+		pos.y += shift.y;
+		SetPos(pos);*/
 		engine->MoveObject(std::shared_ptr<GameObject>(this, [](void*) {}), shift);
 	}
 	lastPhysic = std::chrono::high_resolution_clock::now();

@@ -14,20 +14,19 @@ int main(int argc, char** argv)
 	std::cin >> adres;
 	std::cout << "Podaj port:\n";
 	std::cin >> port;*/
-	::ShowWindow(::GetConsoleWindow(), SW_HIDE);
 
 	if (argc < 2) {
 		std::thread th1([&]()
 		{
 			std::string tmp = argv[0];
-			tmp += " 32";
+			tmp += " 32 >2.tmp";
 			system(tmp.c_str());
 		});
 
 		std::thread th2([&]()
 		{
 			std::string tmp = argv[0];
-			tmp += " 32";
+			tmp += " 32 > 1.tmp";
 			system(tmp.c_str());
 		});
 
