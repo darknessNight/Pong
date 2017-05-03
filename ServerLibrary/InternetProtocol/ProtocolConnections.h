@@ -16,6 +16,21 @@ namespace Pong
 			virtual std::vector<UserMove> GetActionsForUserId(unsigned id) = 0;
 		};
 
+		class ServerUserPartConnection
+		{
+			std::shared_ptr<ServerProtocolConnection> connection;
+			unsigned userId;
+		public:
+			ServerUserPartConnection(std::shared_ptr<ServerProtocolConnection> conn, unsigned userId) 
+			:connection(conn), userId(userId)
+			{}
+
+			std::vector<UserMove> GetActions() const
+			{
+				return connection->GetActionsForUserId(userId);
+			}
+		};
+
 		class ClientProtocolConnection abstract
 		{
 		public:

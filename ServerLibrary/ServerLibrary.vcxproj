@@ -127,6 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BadBall.h" />
+    <ClInclude Include="CommonBall.h" />
+    <ClInclude Include="Consts.h" />
+    <ClInclude Include="DeadWall.h" />
+    <ClInclude Include="GameEngine\Helpers.h" />
+    <ClInclude Include="GameEngine\shared_mutex_lock_priority.h" />
+    <ClInclude Include="GameEngine\View.h" />
     <ClInclude Include="InternetProtocol\ConnectionFactory.h" />
     <ClInclude Include="InternetProtocol\ConstantsAndStructs.h" />
     <ClInclude Include="InternetProtocol\Connections.h" />
@@ -139,6 +146,9 @@
     <ClInclude Include="IoC.h" />
     <ClInclude Include="GameEngine\GameEngine.h" />
     <ClInclude Include="GameEngine\GameObject.h" />
+    <ClInclude Include="PlayerObject.h" />
+    <ClInclude Include="Pong.h" />
+    <ClInclude Include="ProtocolConnectionView.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

@@ -1,4 +1,5 @@
 #include "GameWindow.h"
+#include <Windows.h>
 
 GameWindow::GameWindow(std::string adres, int port) {
 	this->adres = adres;
@@ -6,21 +7,50 @@ GameWindow::GameWindow(std::string adres, int port) {
 }
 
 
+bool GameWindow::IsWindowOpen()
+{
+	std::lock_guard<std::mutex> lock(mutex);
+	return window.isOpen();
+}
+
+bool GameWindow::PoolEventIfCan(sf::Event &event)
+{
+	std::lock_guard<std::mutex> lock(mutex);
+	return window.isOpen() && window.pollEvent(event);
+}
+
 void GameWindow::start() {
 
-	this->window.create(sf::VideoMode(WINDOWSIZE, WINDOWSIZE), "PONG",sf::Style::Close);
+	try {
+		Pong::Internet::JsonClientProtocolConnectionFactory factory;
+		connection = factory.GetConnectionFor(adres, port);
+	}
+	catch(std::exception e)
+	{
+		//TODO nie mo¿na by³o siê po³¹czyæ. WYJATEK CHUJU!
+	}
+
+	this->window.create(sf::VideoMode(WINDOWSIZE, WINDOWSIZE), "PONG", sf::Style::Close);
 	this->stopDrawing = false;
 
 	this->window.setActive(false);
-	sf::Thread drawingThread(&GameWindow::startDrawing,this);
+	sf::Thread drawingThread(&GameWindow::startDrawing, this);
 	drawingThread.launch();
 
-	while (window.isOpen())
+	std::map<sf::Keyboard::Key, bool> pressed;
+	pressed[sf::Keyboard::Up] = false;
+	pressed[sf::Keyboard::Down] = false;
+	pressed[sf::Keyboard::Left] = false;
+	pressed[sf::Keyboard::Right] = false;
+	pressed[sf::Keyboard::Space] = false;
+	pressed[sf::Keyboard::Z] = false;
+
+	while (IsWindowOpen())
 	{
 
 		sf::Event event;
 
-		while (window.pollEvent(event))
+		while (PoolEventIfCan(event))
 		{
 
 			if (event.type == sf::Event::Closed) {
@@ -30,19 +60,30 @@ void GameWindow::start() {
 
 			if (event.type == sf::Event::KeyPressed) {
 				if (event.key.code == sf::Keyboard::Up) {
-					
+					if (!pressed[sf::Keyboard::Up]) {
+						connection->SendActionToServer(Pong::Internet::UserActionTypes::Shoot);
+						pressed[sf::Keyboard::Up] = true;
+					}
 				}
 				else if (event.key.code == sf::Keyboard::Down) {
-
 				}
 				else if (event.key.code == sf::Keyboard::Left) {
-
+					if (!pressed[sf::Keyboard::Left] && !pressed[sf::Keyboard::Right]) {
+						connection->SendActionToServer(Pong::Internet::UserActionTypes::StartMoveLeft);
+						pressed[sf::Keyboard::Left] = true;
+					}
 				}
 				else if (event.key.code == sf::Keyboard::Right) {
-
+					if (!pressed[sf::Keyboard::Left] && !pressed[sf::Keyboard::Right]) {
+						connection->SendActionToServer(Pong::Internet::UserActionTypes::StartMoveRight);
+						pressed[sf::Keyboard::Right] = true;
+					}
 				}
 				else if (event.key.code == sf::Keyboard::Space) {
-
+					if (!pressed[sf::Keyboard::Space]) {
+						connection->SendActionToServer(Pong::Internet::UserActionTypes::Shield);
+						pressed[sf::Keyboard::Space] = true;
+					}
 				}
 				else if (event.key.code == sf::Keyboard::Z) {
 
@@ -51,16 +92,26 @@ void GameWindow::start() {
 
 			if (event.type == sf::Event::KeyReleased) {
 				if (event.key.code == sf::Keyboard::Up) {
-
+					if (pressed[sf::Keyboard::Up]) {
+						pressed[sf::Keyboard::Up] = false;
+					}
 				}
-				else if (event.key.code == sf::Keyboard::Down) {
-
+				else if (event.key.code == sf::Keyboard::Space) {
+					if (pressed[sf::Keyboard::Space]) {
+						pressed[sf::Keyboard::Space] = false;
+					}
 				}
 				else if (event.key.code == sf::Keyboard::Left) {
-
+					if (pressed[sf::Keyboard::Left]) {
+						connection->SendActionToServer(Pong::Internet::UserActionTypes::StopMoveLeft);
+						pressed[sf::Keyboard::Left] = false;
+					}
 				}
 				else if (event.key.code == sf::Keyboard::Right) {
-
+					if (pressed[sf::Keyboard::Right]) {
+						connection->SendActionToServer(Pong::Internet::UserActionTypes::StopMoveRight);
+						pressed[sf::Keyboard::Right] = false;
+					}
 				}
 			}
 		}
@@ -70,68 +121,38 @@ void GameWindow::start() {
 
 
 void GameWindow::startDrawing() {
-	std::vector<Pong::Internet::ConnectionObject> temp;
-
-	Pong::Internet::ConnectionObject ball, ballRed, ballRed2, player1, player2, player3;
-	int checkInt = 0, asdf = 0;
-
-	
-
-
 	while (!this->stopDrawing) {
-
-		//------------------------------------------------------
-		ball.type = Pong::Internet::ConnectionObject::BallCommon;
-		ball.x = 0.5;
-		ball.y = 0.5;
-
-		ballRed.type = Pong::Internet::ConnectionObject::BallRed;
-		ballRed.x = 0.1;
-		ballRed.y = 0.35;
-
-		ballRed2.type = Pong::Internet::ConnectionObject::BallRed;
-		ballRed2.x = 0.9;
-		ballRed2.y = 0.736;
-
-		player1.type = Pong::Internet::ConnectionObject::Player1;
-		player1.x = 0.9;
-		player1.shielded = false;
-		player1.lives = checkInt;
-		asdf++;
-		if (asdf > 1000) {
-			checkInt++;
-			asdf = 0;
-			if (checkInt == 4)
-				checkInt = 0;
+		std::vector<Pong::Internet::ConnectionObject> temp;
+		try {
+			temp = connection->GetLatestObjectsFromServer();
+			//TODO on nie czeka, a¿ bêdzie coœ, tylko zwraca pust¹ tablicê, zrób z tym co chcesz
+			while (temp.size() == 0) {
+				temp = connection->GetLatestObjectsFromServer();
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+			}
 		}
-
-		player2.type = Pong::Internet::ConnectionObject::Player2;
-		player2.x = 0.5;
-		player2.lives = 0;
-		player2.shielded = true;
-
-		player3.type = Pong::Internet::ConnectionObject::Player3;
-		player3.x = 0.36;
-		player3.lives = 3;
-		player3.shielded = false;
-
-		temp.clear();
-		temp.push_back(ball);
-		temp.push_back(ballRed);
-		temp.push_back(ballRed2);
-		temp.push_back(player1);
-		temp.push_back(player2);
-		temp.push_back(player3);
+		catch (std::exception e)
+		{
+			::ShowWindow(::GetConsoleWindow(), SW_HIDE);
+			std::cout << "Error: " << e.what();
+			MessageBoxA(nullptr, e.what(), "Error", 0);
+			std::lock_guard<std::mutex> lock(mutex);
+			window.close();
+			return;
+		}
 		//---------------------------------------------------------
+
+		//TODO tutaj przyda³oby siê na³o¿yæ mutexy na to okno, ale póki siê nie wywala przez to, to spoko
 
 		this->window.clear(sf::Color::Black);
 
 		sf::RectangleShape wall(sf::Vector2f(WINDOWSIZE, WINDOWSIZE*Pong::Consts::BALL_RADIUS));
-		wall.setPosition(sf::Vector2f(0,0));
+		wall.setPosition(sf::Vector2f(0, 0));
 		wall.setFillColor(sf::Color::Yellow);
 		this->window.draw(wall);
 
 		for (int i = 0; i < temp.size(); i++) {
+
 			if (temp[i].type == Pong::Internet::ConnectionObject::BallCommon) {
 				sf::CircleShape circle(Pong::Consts::BALL_RADIUS*WINDOWSIZE);
 				circle.setPosition(sf::Vector2f(temp[i].x*WINDOWSIZE, temp[i].y*WINDOWSIZE));
@@ -144,16 +165,16 @@ void GameWindow::startDrawing() {
 				circle.setFillColor(sf::Color::Red);
 				this->window.draw(circle);
 			}
-			if (temp[i].type == Pong::Internet::ConnectionObject::Player1) {
+			if (temp[i].type == Pong::Internet::ConnectionObject::Player3) {
 				if (temp[i].lives > 0) {
 					sf::RectangleShape player1Rect(sf::Vector2f(WINDOWSIZE*Pong::Consts::PLAYER_WIDTH, WINDOWSIZE*Pong::Consts::BALL_RADIUS));
 					player1Rect.rotate(90);
-					player1Rect.setPosition(sf::Vector2f(WINDOWSIZE*Pong::Consts::BALL_RADIUS, temp[i].x*WINDOWSIZE));
+					player1Rect.setPosition(sf::Vector2f((temp[i].x + Pong::Consts::BALL_RADIUS)*WINDOWSIZE , temp[i].y*WINDOWSIZE));
 					if (temp[i].shielded == true) {
 						player1Rect.setFillColor(sf::Color::Blue);
 					}
 					else {
-						if(temp[i].lives==3)
+						if (temp[i].lives == 3)
 							player1Rect.setFillColor(sf::Color::Green);
 						if (temp[i].lives == 2)
 							player1Rect.setFillColor(sf::Color::Magenta);
@@ -173,7 +194,7 @@ void GameWindow::startDrawing() {
 			if (temp[i].type == Pong::Internet::ConnectionObject::Player2) {
 				if (temp[i].lives > 0) {
 					sf::RectangleShape player1Rect(sf::Vector2f(WINDOWSIZE*Pong::Consts::PLAYER_WIDTH, WINDOWSIZE*Pong::Consts::BALL_RADIUS));
-					player1Rect.setPosition(sf::Vector2f(temp[i].x*WINDOWSIZE, WINDOWSIZE - WINDOWSIZE*Pong::Consts::BALL_RADIUS));
+					player1Rect.setPosition(sf::Vector2f((temp[i].x + Pong::Consts::BALL_RADIUS)*WINDOWSIZE, temp[i].y*WINDOWSIZE));
 					if (temp[i].shielded == true) {
 						player1Rect.setFillColor(sf::Color::Blue);
 					}
@@ -194,11 +215,11 @@ void GameWindow::startDrawing() {
 					this->window.draw(wall);
 				}
 			}
-			if (temp[i].type == Pong::Internet::ConnectionObject::Player3) {
+			if (temp[i].type == Pong::Internet::ConnectionObject::Player1) {
 				if (temp[i].lives > 0) {
 					sf::RectangleShape player1Rect(sf::Vector2f(WINDOWSIZE*Pong::Consts::PLAYER_WIDTH, WINDOWSIZE*Pong::Consts::BALL_RADIUS));
 					player1Rect.rotate(90);
-					player1Rect.setPosition(sf::Vector2f(WINDOWSIZE, temp[i].x*WINDOWSIZE));
+					player1Rect.setPosition(sf::Vector2f((temp[i].x + Pong::Consts::BALL_RADIUS)*WINDOWSIZE, temp[i].y*WINDOWSIZE));
 					if (temp[i].shielded == true) {
 						player1Rect.setFillColor(sf::Color::Blue);
 					}

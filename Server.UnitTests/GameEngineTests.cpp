@@ -83,11 +83,11 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto result = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::Test);
+				auto result = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
 				TestGameObject expected;
 				expected.SetPos({ 100,200 });
 				expected.SetSize({ 10,10 });
-				expected.SetType({ GameObject::Type::Test });
+				expected.SetType({ GameObject::Type::DeadWall });
 				Assert::AreEqual<GameObject>(*reinterpret_cast<GameObject*>(&expected), *result);
 			}
 
@@ -95,8 +95,8 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::DeadWall);
 
 				auto result = gameEngine->WillCollide(o2, { 10,0 });
 				Assert::IsFalse(result);
@@ -107,8 +107,8 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::DeadWall);
 
 				auto result = gameEngine->WillCollide(o2, { -10,0 });
 				Assert::IsTrue(result);
@@ -118,8 +118,8 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::DeadWall);
 
 				auto result = gameEngine->WillCollide(o2, { 0,-10 });
 				Assert::IsTrue(result);
@@ -129,10 +129,21 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::DeadWall);
 
 				auto result = gameEngine->WillCollide(o2, { -11,0 });
+				Assert::IsTrue(result);
+			}
+
+			TEST_METHOD(WillCollide_HasTwoCollideObjects0XAxisMinusMinimalShift_CheckReturnTrue)
+			{
+				auto gameEngine = PrepareGameEngine();
+
+				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::DeadWall);
+
+				auto result = gameEngine->WillCollide(o2, { -1,0 });
 				Assert::IsTrue(result);
 			}
 
@@ -140,10 +151,10 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::DeadWall);
 
-				auto result = gameEngine->WillCollide(o1, { 11,0 });
+				auto result = gameEngine->WillCollide(o1, { 1,0 });
 				Assert::IsTrue(result);
 			}
 
@@ -151,10 +162,10 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::DeadWall);
 
-				auto result = gameEngine->WillCollide(o1, { 0,11 });
+				auto result = gameEngine->WillCollide(o1, { 0,1 });
 				Assert::IsTrue(result);
 			}
 
@@ -162,10 +173,10 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::DeadWall);
 
-				auto result = gameEngine->WillCollide(o2, { 0,-11 });
+				auto result = gameEngine->WillCollide(o2, { 0,-1 });
 				Assert::IsTrue(result);
 			}
 
@@ -173,8 +184,8 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 110,200 }, { 10,10 }, GameObject::Type::DeadWall);
 
 				auto result = gameEngine->WillCollide(o2, { -100,0 });
 
@@ -186,8 +197,8 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::DeadWall);
 
 				auto result = gameEngine->WillCollide(o2, { 0,-100 });
 				Assert::IsTrue(result);
@@ -197,8 +208,8 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::DeadWall);
 
 				auto result = gameEngine->GetAllObjects();
 				std::vector<std::shared_ptr<GameObject>> expected = { o1,o2 };
@@ -209,8 +220,8 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::DeadWall);
 
 				auto result = gameEngine->MoveObject(o2, { 0,-10 });
 				Assert::AreNotEqual({ 100,200 }, o2->GetPos());
@@ -220,8 +231,8 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 100,200 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 100,210 }, { 10,10 }, GameObject::Type::DeadWall);
 
 				auto result = gameEngine->MoveObject(o2, { 0,10 });
 				Assert::AreEqual({ 100,220 }, o2->GetPos());
@@ -230,9 +241,9 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 10,10 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 40,60 }, { 10,10 }, GameObject::Type::Test);
-				auto o3 = gameEngine->CreateObject({ 71,50 }, { 10,10 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 10,10 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 40,60 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o3 = gameEngine->CreateObject({ 71,50 }, { 10,10 }, GameObject::Type::DeadWall);
 
 				auto result = gameEngine->WillCollide(o1, { 100,100 });
 				Assert::IsTrue(result);
@@ -241,8 +252,8 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 25,10 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 10,50 }, { 100,10 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 25,10 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 10,50 }, { 100,10 }, GameObject::Type::DeadWall);
 
 				auto result = gameEngine->WillCollide(o1, { 0,100 });
 				Assert::IsTrue(result);
@@ -251,8 +262,8 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 10,10 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 10,50 }, { 100,10 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 10,10 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 10,50 }, { 100,10 }, GameObject::Type::DeadWall);
 
 				auto result = gameEngine->WillCollide(o1, { 100,100 });
 				Assert::IsTrue(result);
@@ -261,11 +272,21 @@ namespace Pong
 			{
 				auto gameEngine = PrepareGameEngine();
 
-				auto o1 = gameEngine->CreateObject({ 10,25 }, { 10,10 }, GameObject::Type::Test);
-				auto o2 = gameEngine->CreateObject({ 50,10 }, { 10,100 }, GameObject::Type::Test);
+				auto o1 = gameEngine->CreateObject({ 10,25 }, { 10,10 }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 50,10 }, { 10,100 }, GameObject::Type::DeadWall);
 
 				auto result = gameEngine->WillCollide(o1, { 100,0 });
 				Assert::IsTrue(result);
+			}
+			TEST_METHOD(SmallValuesTest1) {
+				auto gameEngine = PrepareGameEngine();
+
+				auto o1 = gameEngine->CreateObject({ 0.99f,0.45f }, { 0.01f,0.1f }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 0.446364f, 0.99f }, { 0.1f,0.01f }, GameObject::Type::DeadWall);
+				auto o3 = gameEngine->CreateObject({ 0, 0.45f }, { 0.01f,0.1f }, GameObject::Type::DeadWall);
+
+				auto result = gameEngine->WillCollide(o2, { 0.4f,0 });
+				Assert::IsFalse(result);
 			}
 		};
 	}

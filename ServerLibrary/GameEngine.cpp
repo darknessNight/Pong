@@ -1,6 +1,10 @@
 #include"stdafx.h"
 #include "GameEngine\GameEngine.h"
 #include "GameEngine\GameObject.h"
+#include "GameEngine/Helpers.h"
+
+using Pong::GameEngine::Pointf;
+
 //
 /*
 		^ -y
@@ -20,97 +24,109 @@
 
 using namespace Pong::GameEngine;
 
-void Pong::GameEngine::GameEngine::addObject(std::shared_ptr<GameObject> obj)
+bool  GameEngine::MoveObject(std::shared_ptr<GameObject> obj, Pointf shift)
 {
-	this->allObjects.push_back(obj);
-}
-
-std::shared_ptr<GameObject> Pong::GameEngine::GameEngine::CreateObject(Pointf pos, Pointf size, GameObject::Type type)
-{
-	std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(pos, size, type);
-	addObject(obj);
-	return obj;
-}
-
-
-
-bool Pong::GameEngine::GameEngine::MoveObject(std::shared_ptr<GameObject> obj, Pointf shift)
-{
-	if (!WillCollide(obj, shift)) {
+	auto result = checkDeadzoneAndObjectsNewPosition(obj, shift);
+	if (result==nullptr) {
 		GameObject* object = obj.get();
 		object->SetPos(shift + object->GetPos());
 		return true;
+	}else
+	{
+		obj->CollideAction(result);
+		result->CollideAction(obj);
+	//TODO przyda³oby siê dosuniêcie do obiektu z którym koliduje	
 	}
-
 	return false;
 }
 
 bool Pong::GameEngine::GameEngine::WillCollide(std::shared_ptr<GameObject> obj, Pointf shift)
 {
-	GameObject* object = obj.get();
-	return checkDeadzoneAndObjectsNewPosition(object, shift);
+	return checkDeadzoneAndObjectsNewPosition(obj, shift)!=nullptr;
 }
 
-bool Pong::GameEngine::GameEngine::checkDeadzoneAndObjectsNewPosition(GameObject* obj, Pointf shift)
+std::shared_ptr<GameObject> Pong::GameEngine::GameEngine::checkDeadzoneAndObjectsNewPosition(std::shared_ptr<GameObject> obj, Pointf shift)
 {
-	Corners cornersOfObject = getShiftedCorners(obj, shift);
-	Pointf position = obj->GetPos();
-	Pointf size = obj->GetSize();
+	auto cornersOfObject = getShiftedCorners(obj, shift);
+	auto position = obj->GetPos();
+	auto size = obj->GetSize();
 	LinearFunctions_Deadzones DeadZone(position, size, shift);
-	std::vector < std::shared_ptr<GameObject>> gameObjectsVector = GetAllObjects();
+	auto gameObjectsVector = GetAllObjects();
 
-	for (unsigned int i = 0; i < gameObjectsVector.size(); i++)
+	for (auto object:gameObjectsVector)
 	{
-		GameObject* object = gameObjectsVector.at(i).get();
 		if (object == obj) {
 			continue;
 		}
-		Corners cornersOfCheckedOcject = getShiftedCorners(object, { 0,0 });
-		if (checkIfPositionsAreEqual(object, cornersOfObject))
-			return true;
-
-		if (checkNewPosition(object, cornersOfObject))
-			return true;
-
-
-		if (DeadZone.checkIfPointIsInDeadZone(getCenterPointBasedOnCorners(cornersOfCheckedOcject)))
-			return true;
-
-		if (DeadZone.checkIfPointIsInDeadZone(cornersOfCheckedOcject.upperLeft))//was cornderOfObject before
-			return true;
-		if (DeadZone.checkIfPointIsInDeadZone(cornersOfCheckedOcject.upperRight))
-			return true;
-		if (DeadZone.checkIfPointIsInDeadZone(cornersOfCheckedOcject.lowerLeft))
-			return true;
-		if (DeadZone.checkIfPointIsInDeadZone(cornersOfCheckedOcject.lowerRight))
-			return true;
-
-		if (DeadZone.checkIfDeadZoneOverlapsObject(cornersOfCheckedOcject))
-			return true;
+		bool value1;
+		if (CheckWillObjectsCollide(cornersOfObject, DeadZone, object))
+		{
+			if(object->IsCollideWith(obj) && obj->IsCollideWith(object))
+			return object;
+		}
+			
 	}
 
+	return nullptr;
+}
+
+bool GameEngine::CheckWillObjectsCollide(Corners cornersOfObject, LinearFunctions_Deadzones DeadZone, std::shared_ptr<GameObject> object)
+{
+	Corners cornersOfCheckedOcject = getShiftedCorners(object, { 0,0 });
+	if (checkIfPositionsAreEqual(object, cornersOfObject))
+	{
+		return true;
+	}
+
+	if (checkNewPosition(object, cornersOfObject))
+	{
+		return true;
+	}
+
+
+	if (DeadZone.checkIfPointIsInDeadZone(getCenterPointBasedOnCorners(cornersOfCheckedOcject)))
+	{
+		return true;
+	}
+
+	if (DeadZone.checkIfPointIsInDeadZone(cornersOfCheckedOcject.upperLeft))//was cornderOfObject before
+	{
+		return true;
+	}
+	if (DeadZone.checkIfPointIsInDeadZone(cornersOfCheckedOcject.upperRight))
+	{
+		return true;
+	}
+	if (DeadZone.checkIfPointIsInDeadZone(cornersOfCheckedOcject.lowerLeft))
+	{
+		return true;
+	}
+	if (DeadZone.checkIfPointIsInDeadZone(cornersOfCheckedOcject.lowerRight))
+	{
+		return true;
+	}
+
+	if (DeadZone.checkIfDeadZoneOverlapsObject(cornersOfCheckedOcject))
+	{
+		return true;
+	}
 	return false;
 }
 
-Corners Pong::GameEngine::GameEngine::getShiftedCorners(GameObject* obj, Pointf shift)
+Corners Pong::GameEngine::GameEngine::getShiftedCorners(std::shared_ptr<GameObject> obj, Pointf shift)
 {
 	Corners corner;
 	Pointf objectSize = obj->GetSize();
 
 	corner.upperLeft = obj->GetPos() + shift;
-	corner.lowerLeft = obj->GetPos() + shift;
-	corner.upperRight = obj->GetPos() + shift;
-	corner.lowerRight = obj->GetPos() + shift;
-
-	corner.lowerLeft.y += objectSize.y;
-	corner.upperRight.x += objectSize.x;
-	corner.lowerRight.x += objectSize.x;
-	corner.lowerRight.y += objectSize.y;
+	corner.lowerLeft = obj->GetPos() + shift+ Pointf{0, obj->GetSize().y};
+	corner.upperRight = obj->GetPos() + shift + Pointf{ obj->GetSize().x, 0 };
+	corner.lowerRight = obj->GetPos()+obj->GetSize() + shift;
 
 	return Corners(corner);
 }
 
-bool Pong::GameEngine::GameEngine::checkIfPositionsAreEqual(GameObject * obj, Corners cornersOfOcject)
+bool Pong::GameEngine::GameEngine::checkIfPositionsAreEqual(std::shared_ptr<GameObject> obj, Corners cornersOfOcject)
 {
 	Pointf position = obj->GetPos();
 	if (position == cornersOfOcject.upperLeft)
@@ -118,50 +134,21 @@ bool Pong::GameEngine::GameEngine::checkIfPositionsAreEqual(GameObject * obj, Co
 	return false;
 }
 
-bool Pong::GameEngine::GameEngine::checkNewPosition(GameObject* obj1, Corners cornersOfObject)
+bool Pong::GameEngine::GameEngine::checkNewPosition(std::shared_ptr<GameObject> obj1, Corners cornersOfObject)
 {
 	int framedPoints;
-	bool retVal = false;
-	Pointf zeroPoint;
-	Pointf* cornersArray = getCornersInArray(obj1, zeroPoint);
+	Pointf zeroPoint={0,0};
+	Corners objCorners = getShiftedCorners(obj1, zeroPoint);
 
-	for (int i = 0; i < 4; i++) {
-		framedPoints = 0;
-		if (cornersArray[i].x > cornersOfObject.upperLeft.x &&
-			cornersArray[i].y > cornersOfObject.upperLeft.y)
-			framedPoints++;
-		if (cornersArray[i].x < cornersOfObject.upperRight.x &&
-			cornersArray[i].y > cornersOfObject.upperRight.y)
-			framedPoints++;
-		if (cornersArray[i].x > cornersOfObject.lowerLeft.x &&
-			cornersArray[i].y < cornersOfObject.lowerLeft.y)
-			framedPoints++;
-		if (cornersArray[i].x < cornersOfObject.lowerRight.x &&
-			cornersArray[i].y < cornersOfObject.lowerRight.y)
-			framedPoints++;
-
-		if (framedPoints == 4) {
-			retVal = true;
-			break;
-		}
-	}
-
-	delete[] cornersArray;
-	return retVal;
+	if (objCorners.upperLeft.x > cornersOfObject.lowerRight.x || objCorners.upperLeft.y > cornersOfObject.lowerRight.y
+		|| objCorners.lowerRight.x < cornersOfObject.upperLeft.x || objCorners.lowerRight.y < cornersOfObject.upperLeft.y)
+		return false;
+	return true;
 }
 
-Pointf* Pong::GameEngine::GameEngine::getCornersInArray(GameObject * obj, Pointf shift)
+Pointf* Pong::GameEngine::GameEngine::getCornersInArray(std::shared_ptr<GameObject> obj, Pointf shift)
 {
-	Corners corner = getShiftedCorners(obj, shift);
-
-	Pointf* pointsArray = new Pointf[4];
-
-	pointsArray[0] = corner.upperLeft;
-	pointsArray[1] = corner.upperRight;
-	pointsArray[2] = corner.lowerLeft;
-	pointsArray[3] = corner.lowerRight;
-
-	return pointsArray;
+	return nullptr;
 }
 
 Pointf Pong::GameEngine::GameEngine::getCenterPointBasedOnCorners(Corners corners)

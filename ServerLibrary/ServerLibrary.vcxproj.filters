@@ -15,7 +15,7 @@
     </Filter>
     <Filter Include="Header Files\InternetProtocol">
       <UniqueIdentifier>{1e6411ed-4eb8-4f61-bd39-5f4e29363c86}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="Header Files\GameEngine">
       <UniqueIdentifier>{4656ec35-6d58-4abe-8d8a-5c0ff2ae2ac0}</UniqueIdentifier>
     </Filter>
@@ -56,12 +56,42 @@
     </ClInclude>
     <ClInclude Include="InternetProtocol\JsonClientProtocolConnection.h">
       <Filter>Header Files\InternetProtocol</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="GameEngine\GameObject.h">
       <Filter>Header Files\GameEngine</Filter>
     </ClInclude>
     <ClInclude Include="GameEngine\GameEngine.h">
       <Filter>Header Files\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\shared_mutex_lock_priority.h">
+      <Filter>Header Files\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\Helpers.h">
+      <Filter>Header Files\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\View.h">
+      <Filter>Header Files\GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtocolConnectionView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Consts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BadBall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DeadWall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CommonBall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pong.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -71,8 +101,6 @@
     <ClCompile Include="IoC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InternetProtocol\TcpConnections.cpp">
-	</ClCompile>
     <ClCompile Include="GameEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -80,6 +108,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LinearFunction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InternetProtocol\TcpConnections.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

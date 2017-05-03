@@ -1,16 +1,16 @@
 #include"stdafx.h"
-#include"GameEngine\GameEngine.h"
-#include"GameEngine\GameObject.h"
+#include "GameEngine/GameEngine.h"
 
+using namespace Pong::GameEngine;
 
-Pong::GameEngine::LinearFunctions_Deadzones::LinearFunctions_Deadzones(Pointf pos, Pointf size, Pointf shift)
+LinearFunctions_Deadzones::LinearFunctions_Deadzones(Pointf pos, Pointf size, Pointf shift)
 {
-	this->setNewFunktionVariables(pos, size, shift);
+	this->setNewFunctionVariables(pos, size, shift);
 	this->y = 0;
 	this->x = 0;
 }
 
-Pong::GameEngine::LinearFunctions_Deadzones::LinearFunctions_Deadzones()
+LinearFunctions_Deadzones::LinearFunctions_Deadzones()
 {
 	this->a = 0;
 	this->b1 = 0;
@@ -19,7 +19,7 @@ Pong::GameEngine::LinearFunctions_Deadzones::LinearFunctions_Deadzones()
 	this->x = 0;
 }
 
-void Pong::GameEngine::LinearFunctions_Deadzones::setNewFunktionVariables(Pointf pos, Pointf size, Pointf shift)
+void LinearFunctions_Deadzones::setNewFunctionVariables(Pointf pos, Pointf size, Pointf shift)
 {
 	this->functionType = determineFunctionType(shift);
 	if (functionType == HORIZONTAL) {	//y1 = b1; y2 = b2
@@ -74,7 +74,7 @@ void Pong::GameEngine::LinearFunctions_Deadzones::setNewFunktionVariables(Pointf
 	}
 }
 
-float Pong::GameEngine::LinearFunctions_Deadzones::F1(float x)
+float LinearFunctions_Deadzones::F1(float x)
 {
 	if (functionType == NONE)
 		return NAN;
@@ -85,7 +85,7 @@ float Pong::GameEngine::LinearFunctions_Deadzones::F1(float x)
 	return NAN;
 }
 
-float Pong::GameEngine::LinearFunctions_Deadzones::F2(float x)
+float LinearFunctions_Deadzones::F2(float x)
 {
 	if (functionType == NONE)
 		return NAN;
@@ -97,7 +97,7 @@ float Pong::GameEngine::LinearFunctions_Deadzones::F2(float x)
 }
 
 
-bool Pong::GameEngine::LinearFunctions_Deadzones::checkIfPointIsInDeadZone(Pointf pos)
+bool LinearFunctions_Deadzones::checkIfPointIsInDeadZone(Pointf pos)
 {
 	if (functionType == NONE)
 		return false;
@@ -107,7 +107,7 @@ bool Pong::GameEngine::LinearFunctions_Deadzones::checkIfPointIsInDeadZone(Point
 		if (pos.y <= y1 && pos.y >= y2)
 			return true;
 	}
-	else if(pointIsWithinDomain(pos.y)){
+	else if(functionType == VERTICAL && pointIsWithinDomain(pos.y)){
 		float x1 = F1(pos.y);	//in this case F1 returns the right coord.
 		float x2 = F2(pos.y);	//in this case F2 returns the left coord.
 		if (pos.x <= x1 && pos.x >= x2)
@@ -116,7 +116,7 @@ bool Pong::GameEngine::LinearFunctions_Deadzones::checkIfPointIsInDeadZone(Point
 	return false;
 }
 
-bool Pong::GameEngine::LinearFunctions_Deadzones::checkIfDeadZoneOverlapsObject(Corners corners)
+bool LinearFunctions_Deadzones::checkIfDeadZoneOverlapsObject(Corners corners)
 {
 	if (functionType == NONE)
 		return false;
@@ -155,14 +155,14 @@ bool Pong::GameEngine::LinearFunctions_Deadzones::checkIfDeadZoneOverlapsObject(
 	return false;
 }
 
-bool Pong::GameEngine::LinearFunctions_Deadzones::pointIsWithinDomain(float x)
+bool LinearFunctions_Deadzones::pointIsWithinDomain(float x)
 {
 	if (x > Domain.from && x < Domain.to)
 		return true;
 	return false;
 }
 
-int Pong::GameEngine::LinearFunctions_Deadzones::determineFunctionType(Pointf shift)
+int LinearFunctions_Deadzones::determineFunctionType(Pointf shift)
 {
 	if ((shift.x > 0 && shift.y > 0) ||
 		(shift.x < 0 && shift.y < 0))
