@@ -8,7 +8,7 @@ namespace Pong
 {
 	class CommonBall :public GameEngine::GameObject
 	{
-		std::default_random_engine eng;
+		std::random_device eng;
 		std::uniform_real_distribution<float> dist;
 	public:
 		CommonBall() :

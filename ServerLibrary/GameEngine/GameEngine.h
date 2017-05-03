@@ -78,6 +78,12 @@ namespace Pong
 					}
 			}
 
+			void Clear()
+			{
+				std::lock_guard<shared_mutex_lock_priority> lock(objectsMutex);
+				allObjects.clear();
+			}
+
 		protected:
 			virtual void DoScripts()
 			{

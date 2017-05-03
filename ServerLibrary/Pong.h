@@ -55,7 +55,11 @@ namespace Pong
 							<< " Lives: " << el->GetLives() << "\n";
 					}
 				}
-
+				if(command=="reset")
+				{
+					gameEngine->Stop();
+					StartGame();
+				}
 			}
 			gameEngine->Stop();
 			server.StopListening();
@@ -89,8 +93,10 @@ namespace Pong
 
 		void StartGame()
 		{
+			gameEngine->Clear();
 			for (auto el : players)
 			{
+				el->Reset();
 				gameEngine->AddObject(el);
 				gameEngine->AddObject(std::make_shared<DeadWall>(el));
 			}

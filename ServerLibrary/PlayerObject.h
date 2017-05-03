@@ -33,6 +33,7 @@ namespace Pong
 			dist(0.00001, MaxBallSpeed), connection(connection), addObjFunc(addFunc),
 			removeObjFunc(removeFunc)
 		{
+			Reset();
 			if (id == Internet::Player1)
 			{
 				horizontalMove = false;
@@ -176,7 +177,7 @@ namespace Pong
 		void MakeShoot()
 		{
 			auto result = std::chrono::high_resolution_clock::now() - lastShoot;
-			if (result > shootCooldown)
+			if (result > shootCooldown && GetLives()>0)
 			{
 				std::cout << "Try shoot\n";
 				lastShoot = std::chrono::high_resolution_clock::now();
@@ -239,6 +240,14 @@ namespace Pong
 		void StopRight()
 		{
 			SetPhysic({ {0,0},0 });
+		}
+
+	public:
+		void Reset()
+		{
+			SetPos(GetPosFromId(static_cast<Internet::UserIds>(GetType())));
+			lives = PlayerInitLives;
+			shielded = true;
 		}
 	};
 }
