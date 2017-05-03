@@ -17,8 +17,8 @@ namespace Pong
 		private:
 			std::vector<std::shared_ptr<GameObject>> allObjects;
 			shared_mutex_lock_priority objectsMutex;
-			bool working;
-			bool pause;
+			bool working=false;
+			bool pause=false;
 			std::vector<std::shared_ptr<std::thread>> threads;
 			std::chrono::milliseconds viewCooldown, physicCooldown, scriptCooldown;
 

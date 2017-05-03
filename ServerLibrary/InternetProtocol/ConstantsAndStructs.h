@@ -5,9 +5,9 @@ namespace Pong
 {
 	namespace Consts
 	{
-		const double PLAYER_WIDTH = 0.1;
-		const double BALL_RADIUS = 0.01;
-		const double WALL_WIDTH = 1.f;
+		const float PLAYER_WIDTH = 0.1;
+		const float BALL_RADIUS = 0.01;
+		const float WALL_WIDTH = 1.f;
 	}
 
 	namespace Internet
