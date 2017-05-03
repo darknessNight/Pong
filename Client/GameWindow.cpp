@@ -151,13 +151,6 @@ void GameWindow::startDrawing() {
 		wall.setFillColor(sf::Color::Yellow);
 		this->window.draw(wall);
 
-
-
-		/*for (auto el : temp)
-		{
-			std::cout << "Object: " << el.type << " pos: " << el.x << " " << el.y << "\n";
-		}*/
-
 		for (int i = 0; i < temp.size(); i++) {
 
 			if (temp[i].type == Pong::Internet::ConnectionObject::BallCommon) {
@@ -165,7 +158,6 @@ void GameWindow::startDrawing() {
 				circle.setPosition(sf::Vector2f(temp[i].x*WINDOWSIZE, temp[i].y*WINDOWSIZE));
 				circle.setFillColor(sf::Color::Green);
 				this->window.draw(circle);
-				std::cout << "Pos: " << temp[i].x << " " << temp[i].y << "\n";
 			}
 			if (temp[i].type == Pong::Internet::ConnectionObject::BallRed) {
 				sf::CircleShape circle(Pong::Consts::BALL_RADIUS*WINDOWSIZE);
@@ -202,7 +194,6 @@ void GameWindow::startDrawing() {
 			if (temp[i].type == Pong::Internet::ConnectionObject::Player2) {
 				if (temp[i].lives > 0) {
 					sf::RectangleShape player1Rect(sf::Vector2f(WINDOWSIZE*Pong::Consts::PLAYER_WIDTH, WINDOWSIZE*Pong::Consts::BALL_RADIUS));
-					std::cout << "Player2 pos: " << temp[i].x << " " << temp[i].y << "\n";
 					player1Rect.setPosition(sf::Vector2f((temp[i].x + Pong::Consts::BALL_RADIUS)*WINDOWSIZE, temp[i].y*WINDOWSIZE));
 					if (temp[i].shielded == true) {
 						player1Rect.setFillColor(sf::Color::Blue);

@@ -21,7 +21,6 @@ namespace Pong {
 			switch (other->GetType())
 			{
 			case Type::BallCommon:
-			case Type::DeadWall:
 			case Type::BallRed:
 				return false;
 			default:
