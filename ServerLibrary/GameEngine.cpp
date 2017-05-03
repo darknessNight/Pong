@@ -137,47 +137,18 @@ bool Pong::GameEngine::GameEngine::checkIfPositionsAreEqual(std::shared_ptr<Game
 bool Pong::GameEngine::GameEngine::checkNewPosition(std::shared_ptr<GameObject> obj1, Corners cornersOfObject)
 {
 	int framedPoints;
-	bool retVal = false;
 	Pointf zeroPoint={0,0};
-	Pointf* cornersArray = getCornersInArray(obj1, zeroPoint);
+	Corners objCorners = getShiftedCorners(obj1, zeroPoint);
 
-	for (int i = 0; i < 4; i++) {
-		framedPoints = 0;
-		if (cornersArray[i].x > cornersOfObject.upperLeft.x &&
-			cornersArray[i].y > cornersOfObject.upperLeft.y)
-			framedPoints++;
-		if (cornersArray[i].x < cornersOfObject.upperRight.x &&
-			cornersArray[i].y > cornersOfObject.upperRight.y)
-			framedPoints++;
-		if (cornersArray[i].x > cornersOfObject.lowerLeft.x &&
-			cornersArray[i].y < cornersOfObject.lowerLeft.y)
-			framedPoints++;
-		if (cornersArray[i].x < cornersOfObject.lowerRight.x &&
-			cornersArray[i].y < cornersOfObject.lowerRight.y)
-			framedPoints++;
-
-		if (framedPoints == 4) {
-			retVal = true;
-			break;
-		}
-	}
-
-	delete[] cornersArray;
-	return retVal;
+	if (objCorners.upperLeft.x > cornersOfObject.lowerRight.x || objCorners.upperLeft.y > cornersOfObject.lowerRight.y
+		|| objCorners.lowerRight.x < cornersOfObject.upperLeft.x || objCorners.lowerRight.y < cornersOfObject.upperLeft.y)
+		return false;
+	return true;
 }
 
 Pointf* Pong::GameEngine::GameEngine::getCornersInArray(std::shared_ptr<GameObject> obj, Pointf shift)
 {
-	Corners corner = getShiftedCorners(obj, shift);
-
-	Pointf* pointsArray = new Pointf[4];
-
-	pointsArray[0] = corner.upperLeft;
-	pointsArray[1] = corner.upperRight;
-	pointsArray[2] = corner.lowerLeft;
-	pointsArray[3] = corner.lowerRight;
-
-	return pointsArray;
+	return nullptr;
 }
 
 Pointf Pong::GameEngine::GameEngine::getCenterPointBasedOnCorners(Corners corners)

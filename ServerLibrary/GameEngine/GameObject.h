@@ -152,12 +152,12 @@ namespace Pong
 				auto physic = GetPhysic();
 
 				
-					if (myPos.y>objPos.y + objSize.y || myPos.y + mySize.y<objPos.y )
+					//if (myPos.y>objPos.y + objSize.y || myPos.y + mySize.y<objPos.y )
 				{
 					physic.velocity.x = -physic.velocity.x;
 				}
 				
-				if (myPos.x>objPos.x + objSize.x || myPos.x + mySize.x<objPos.x )
+				//if (myPos.x>objPos.x + objSize.x || myPos.x + mySize.x<objPos.x )
 				{
 					physic.velocity.y = -physic.velocity.y;
 				}
