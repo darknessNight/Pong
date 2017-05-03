@@ -23,12 +23,12 @@ namespace Pong
 			std::chrono::milliseconds viewCooldown, physicCooldown, scriptCooldown;
 
 		private:
-			Corners getShiftedCorners(GameObject* obj, Pointf shift);
-			Pointf* getCornersInArray(GameObject* obj, Pointf shift);
+			Corners getShiftedCorners(std::shared_ptr<GameObject> obj, Pointf shift);
+			Pointf* getCornersInArray(std::shared_ptr<GameObject> obj, Pointf shift);
 			Pointf getCenterPointBasedOnCorners(Corners corners);
-			bool checkDeadzoneAndObjectsNewPosition(GameObject* obj, Pointf shift);
-			bool checkNewPosition(GameObject* obj1, Corners cornersOfObject);
-			bool checkIfPositionsAreEqual(GameObject* obj, Corners cornersOfOcject);
+			std::shared_ptr<GameObject> checkDeadzoneAndObjectsNewPosition(std::shared_ptr<GameObject> obj, Pointf shift);
+			bool checkNewPosition(std::shared_ptr<GameObject> obj1, Corners cornersOfObject);
+			bool checkIfPositionsAreEqual(std::shared_ptr<GameObject> obj, Corners cornersOfOcject);
 
 		public:
 			GameEngine()
@@ -44,6 +44,7 @@ namespace Pong
 			}
 
 			bool WillCollide(std::shared_ptr<GameObject> obj, Pointf shift);
+			bool CheckWillObjectsCollide(Corners cornersOfObject, LinearFunctions_Deadzones DeadZone, std::vector<std::shared_ptr<GameObject>>::value_type object);
 			bool MoveObject(std::shared_ptr<GameObject> obj, Pointf shift);
 
 			std::shared_ptr<GameObject> CreateObject(Pointf pos, Pointf size, GameObject::Type type)
@@ -80,8 +81,12 @@ namespace Pong
 		protected:
 			virtual void DoScripts()
 			{
-				std::shared_lock<shared_mutex_lock_priority> lock(objectsMutex);
-				for (auto obj : allObjects)
+				std::vector<std::shared_ptr<GameObject>> objs;
+				{
+					std::shared_lock<shared_mutex_lock_priority> lock(objectsMutex);
+					objs = allObjects;
+				}
+				for (auto obj : objs)
 				{
 					obj->DoScript();
 				}
@@ -89,8 +94,12 @@ namespace Pong
 
 			virtual void DoPhysic()
 			{
-				std::shared_lock<shared_mutex_lock_priority> lock(objectsMutex);
-				for (auto obj : allObjects)
+				std::vector<std::shared_ptr<GameObject>> objs;
+				{
+					std::shared_lock<shared_mutex_lock_priority> lock(objectsMutex);
+					objs = allObjects;
+				}
+				for (auto obj : objs)
 				{
 					obj->DoPhysic();
 				}
