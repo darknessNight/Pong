@@ -144,10 +144,10 @@ void GameWindow::startDrawing() {
 
 
 
-		for (auto el : temp)
+		/*for (auto el : temp)
 		{
 			std::cout << "Object: " << el.type << " pos: " << el.x << " " << el.y << "\n";
-		}
+		}*/
 
 		for (int i = 0; i < temp.size(); i++) {
 
@@ -156,6 +156,7 @@ void GameWindow::startDrawing() {
 				circle.setPosition(sf::Vector2f(temp[i].x*WINDOWSIZE, temp[i].y*WINDOWSIZE));
 				circle.setFillColor(sf::Color::Green);
 				this->window.draw(circle);
+				std::cout << "Pos: " << temp[i].x << " " << temp[i].y << "\n";
 			}
 			if (temp[i].type == Pong::Internet::ConnectionObject::BallRed) {
 				sf::CircleShape circle(Pong::Consts::BALL_RADIUS*WINDOWSIZE);

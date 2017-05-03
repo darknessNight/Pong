@@ -1,5 +1,5 @@
 #include"stdafx.h"
-#include"GameEngine\GameObject.h"
+#include "GameEngine/GameObject.h"
 #include "GameEngine/GameEngine.h"
 #include <iostream>
 
@@ -19,10 +19,15 @@ inline void Pong::GameEngine::GameObject::DoPhysic()
 	else
 	{
 		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - lastPhysic);
-		Pointf shift = physic.velocity;
+		if (duration.count() == 0)
+			return;
+
+		Pointf shift = GetPhysic().velocity;
 		shift.x /= duration.count();
 		shift.y /= duration.count();
 
+		if (shift.x == 0 && shift.y == 0)
+			return;
 		/*auto pos = GetPos();
 		pos.x += shift.x;
 		pos.y += shift.y;

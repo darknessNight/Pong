@@ -25,6 +25,12 @@ namespace Pong
 			Type type;
 			PhysicParams physic;
 			int lives=1;
+		protected:
+			PhysicParams GetPhysic() const
+			{
+				std::lock_guard<std::shared_mutex> lock(*changeMutex);
+				return physic;
+			}
 		public:
 			virtual void SetPos(Pointf p)
 			{
@@ -98,8 +104,12 @@ namespace Pong
 
 			virtual void DecreaseLives()
 			{
-				std::lock_guard<std::shared_mutex> lock(*changeMutex);
-				lives--;
+				{
+					std::lock_guard<std::shared_mutex> lock(*changeMutex);
+					if(lives>0)
+						lives--;
+				}
+				std::shared_lock<std::shared_mutex> lock(*changeMutex);
 				if (lives == 0)
 					KillObject();
 			}
@@ -135,7 +145,22 @@ namespace Pong
 
 			virtual void CollideAction(std::shared_ptr<GameObject> object)
 			{
-				
+				auto objPos=object->GetPos();
+				auto myPos = GetPos();
+				auto objSize = object->GetSize();
+				auto mySize = object->GetSize();
+				auto physic = GetPhysic();
+
+				if(myPos.x<=objPos.x+(objSize.x*1.1) || myPos.x+mySize.x*1.1>=objPos.x)
+				{
+					physic.velocity.x = -physic.velocity.x;
+				}
+				if (myPos.y <= objPos.y + (objSize.y*1.1) || myPos.y + mySize.y*1.1 >= objPos.y)
+				{
+					physic.velocity.y = -physic.velocity.y;
+				}
+
+				SetPhysic(physic);
 			}
 
 			virtual void DoScript()

@@ -6,20 +6,20 @@
 
 namespace Pong
 {
-	class CommonBall:public GameEngine::GameObject
+	class CommonBall :public GameEngine::GameObject
 	{
+		std::default_random_engine eng;
+		std::uniform_real_distribution<float> dist;
 	public:
-		CommonBall():
-		GameObject({BoardWidth/2, BoardHeight/2},{Consts::BALL_RADIUS,Consts::BALL_RADIUS},Type::BallCommon)
+		CommonBall() :
+			GameObject({ BoardWidth / 2, BoardHeight / 2 }, { Consts::BALL_RADIUS,Consts::BALL_RADIUS }, Type::BallCommon),
+			dist(0.00001, MaxBallSpeed * 2)
 		{
 			Start();
 		}
 	private:
 		void Start()
 		{
-			std::default_random_engine eng;
-			std::uniform_real_distribution<float> dist(0.00001, MaxBallSpeed*2);
-
 			GameEngine::PhysicParams physic;
 			do
 			{
@@ -35,7 +35,7 @@ namespace Pong
 	public:
 		void CollideAction(std::shared_ptr<GameObject> other) override
 		{
-			if(other->GetType()==Type::DeadWall)
+			if (other->GetType() == Type::DeadWall)
 			{
 				Start();
 			}
