@@ -21,12 +21,14 @@ namespace Pong
 		std::chrono::milliseconds shieldTime = PlayerShieldTime;
 
 		std::function<void(std::shared_ptr<GameEngine::GameObject>)> addObjFunc;
+		std::function<void(std::shared_ptr<GameEngine::GameObject>)> removeObjFunc;
 	public:
 		PlayerObject(std::shared_ptr<Internet::ServerUserPartConnection> connection,
 			Internet::UserIds id,
-			std::function<void(std::shared_ptr<GameEngine::GameObject>)> addFunc)
+			std::function<void(std::shared_ptr<GameEngine::GameObject>)> addFunc,
+			std::function<void(std::shared_ptr<GameEngine::GameObject>)> removeFunc)
 			:GameObject(GetPosFromId(id), GetSizeFromId(id), static_cast<Type>(id)),
-			connection(connection), addObjFunc(addFunc)
+			connection(connection), addObjFunc(addFunc), removeObjFunc(removeFunc)
 		{
 			if (id == Internet::Player1)
 			{
@@ -83,6 +85,13 @@ namespace Pong
 		{
 			std::shared_lock<std::shared_mutex> lock(*changeMutex);
 			return false;
+		}
+
+		bool IsCollideWith(std::shared_ptr<GameObject> other) override
+		{
+			if (IsShielded() && other->GetType() == Type::BallRed)
+				return false;
+			return true;
 		}
 
 		void KillObject() override
@@ -163,7 +172,7 @@ namespace Pong
 		{
 			GameEngine::Pointf pos, velocity;
 			PreparePosAndVelocityForRedBall(pos, velocity);
-			auto ball = std::make_shared<BadBall>(pos);
+			auto ball = std::make_shared<BadBall>(pos, removeObjFunc);
 			ball->SetPhysic({ velocity, sqrtf(velocity.x*velocity.x + velocity.y*velocity.y) });
 			return ball;
 		}

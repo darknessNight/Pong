@@ -11,4 +11,5 @@ namespace Pong
 	float MaxBallSpeed = 1.f;
 	float BoardWidth = 100.f;
 	float BoardHeight = 100.f;
+	int BadBallLives = 10;
 }
