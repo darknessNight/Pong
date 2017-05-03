@@ -6,7 +6,7 @@
 
 namespace Pong
 {
-	class ProtocolConnectionView: public GameEngine::View
+	class ProtocolConnectionView : public GameEngine::View
 	{
 		std::shared_ptr<Internet::ServerProtocolConnection> protocolServer;
 	public:
@@ -17,13 +17,13 @@ namespace Pong
 			protocolServer = server;
 		}
 
-		void DisplayObjects(const std::vector<std::shared_ptr<Pong::GameEngine::GameObject>>& objects) override{
+		void DisplayObjects(const std::vector<std::shared_ptr<Pong::GameEngine::GameObject>>& objects) override {
 			std::vector<Internet::ConnectionObject> connectionObjects;
-			for(auto el:objects)
+			for (auto el : objects)
 			{
 
 				Internet::ConnectionObject obj;
-				if(IsPlayer(el))
+				if (IsPlayer(el))
 				{
 					obj.shielded = static_cast<PlayerObject*>(el.get())->IsShielded();
 				}

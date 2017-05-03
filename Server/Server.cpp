@@ -22,7 +22,8 @@ int ReadPort()
 
 int main()
 {
-	int port = ReadPort();
+	//int port = ReadPort();
+	int port = 43562;
 
 	Pong::Pong game;
 

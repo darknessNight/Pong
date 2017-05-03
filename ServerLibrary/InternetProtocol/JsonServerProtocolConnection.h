@@ -44,8 +44,13 @@ namespace Pong
 
 			void SendObjectsToAll(std::vector<ConnectionObject> objects) override
 			{
-				for (auto user : users)
-					SendObjectsToUser(objects, user.second);
+				for (auto user : users) {
+					try {
+						SendObjectsToUser(objects, user.second);
+					}
+					catch (...) {}
+				}
+
 			};
 
 			void SendObjectsToUser(const std::vector<ConnectionObject>& objects, std::shared_ptr<Connection> user) override

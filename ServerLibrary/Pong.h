@@ -24,24 +24,36 @@ namespace Pong
 			server.StartListeningAsync(port);
 
 			protocolServer = std::make_shared<Internet::JsonServerProtocolConnection>();
-			protocolView=std::make_shared<ProtocolConnectionView>(protocolServer);
+			protocolView = std::make_shared<ProtocolConnectionView>(protocolServer);
 			gameEngine = std::make_shared<GameEngine::GameEngine>();
 
-			while(working)
+			while (working)
 			{
-				if(players.size()>=3)
+				if (players.size() >= 3)
 				{
 					StartGame();
+					break;
 				}
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			}
+
+			while (working)
+			{
+				std::cout << "Przyjmuje komendy\n";
+				std::string command;
+				std::cin >> command;
+				if (command == "stop")
+					break;
+			}
+			gameEngine->Stop();
+			server.StopListening();
 		}
 	private:
 		void AcceptConnection(std::shared_ptr<Internet::Connection> connection)
 		{
-			auto id=protocolServer->AddUserConnectionAndGetId(connection);
+			auto id = protocolServer->AddUserConnectionAndGetId(connection);
 			auto user = std::make_shared<Internet::ServerUserPartConnection>(protocolServer, id);
-			players.push_back(std::make_shared<PlayerObject>(user, 
+			players.push_back(std::make_shared<PlayerObject>(user,
 				static_cast<Internet::UserIds>(Internet::UserIds::Player1 + id),
 				[&](std::shared_ptr<GameEngine::GameObject> obj) {gameEngine->AddObject(obj); },
 				[&](std::shared_ptr<GameEngine::GameObject> obj) {gameEngine->RemoveObject(obj); }
@@ -50,12 +62,16 @@ namespace Pong
 
 		void StartGame()
 		{
-			for(auto el:players)
+			for (auto el : players)
 			{
 				gameEngine->AddObject(el);
 				gameEngine->AddObject(std::make_shared<DeadWall>(el));
 			}
 			gameEngine->AddObject(std::make_shared<CommonBall>());
+			gameEngine->AddObject(std::make_shared<GameEngine::GameObject>(
+				GameEngine::Pointf{ 0,0 }, GameEngine::Pointf{ BoardWidth,Consts::BALL_RADIUS },
+				GameEngine::GameObject::Type::Wall
+				));
 
 			gameEngine->Start(protocolView);
 		}

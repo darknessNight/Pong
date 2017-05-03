@@ -30,6 +30,7 @@ namespace Pong
 			std::vector<std::vector<ConnectionObject>> messages;
 			std::shared_ptr<Clock> myClock = std::make_shared<Clock>();
 			std::mutex messagesMutex;
+			bool broken = false;
 		public:
 			explicit JsonClientProtocolConnection(std::shared_ptr<Connection> connection):connection(connection),
 				myThread([&]() {ReceivingLoop(); })
@@ -80,19 +81,32 @@ namespace Pong
 					std::vector<unsigned char> result;
 					try {
 						result = connection->ReadBytesToDelimiter(0);
-					}catch(...){}
+					}catch(...)
+					{
+						broken = true;
+						return;
+					}
 					ProcessMessage(result);
+					std::this_thread::sleep_for(std::chrono::milliseconds(1));
 				}
 			}
 		public:
 			std::vector<std::vector<ConnectionObject>> GetAllObjectsFromServer() override{
+				ConnectionLost();
 				std::lock_guard<std::mutex> lock(messagesMutex);
 				auto all = messages;
 				messages.clear();
 				return all;
 			}
 
+			void ConnectionLost()
+			{
+				if (broken)
+					throw std::exception("Problem with connection");
+			}
+
 			std::vector<ConnectionObject> GetLatestObjectsFromServer() override{
+				ConnectionLost();
 				std::lock_guard<std::mutex> lock(messagesMutex);
 				if (messages.size() <= 0)
 					return std::vector<ConnectionObject>();
@@ -102,6 +116,7 @@ namespace Pong
 			}
 
 			void SendActionToServer(UserActionTypes action) override{
+				ConnectionLost();
 				json message;
 				message["time"] = myClock->GetNow().count();
 				message["move"] = action;

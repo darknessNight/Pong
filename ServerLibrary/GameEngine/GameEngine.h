@@ -17,8 +17,8 @@ namespace Pong
 		private:
 			std::vector<std::shared_ptr<GameObject>> allObjects;
 			shared_mutex_lock_priority objectsMutex;
-			bool working=false;
-			bool pause=false;
+			bool working = false;
+			bool pause = false;
 			std::vector<std::shared_ptr<std::thread>> threads;
 			std::chrono::milliseconds viewCooldown, physicCooldown, scriptCooldown;
 
@@ -61,6 +61,7 @@ namespace Pong
 
 			void AddObject(std::shared_ptr<GameObject> obj)
 			{
+				obj->SetEngine(this);
 				std::lock_guard<shared_mutex_lock_priority> lock(objectsMutex);
 				this->allObjects.push_back(obj);
 			}
@@ -68,8 +69,8 @@ namespace Pong
 			void RemoveObject(std::shared_ptr<GameObject> obj)
 			{
 				std::lock_guard<shared_mutex_lock_priority> lock(objectsMutex);
-				for(auto it=allObjects.begin();it!=allObjects.end();it++)
-					if(*it==obj)
+				for (auto it = allObjects.begin(); it != allObjects.end(); it++)
+					if (*it == obj)
 					{
 						allObjects.erase(it);
 						break;
@@ -80,7 +81,7 @@ namespace Pong
 			virtual void DoScripts()
 			{
 				std::shared_lock<shared_mutex_lock_priority> lock(objectsMutex);
-				for(auto obj:allObjects)
+				for (auto obj : allObjects)
 				{
 					obj->DoScript();
 				}
@@ -104,6 +105,7 @@ namespace Pong
 		public:
 			void Start(std::shared_ptr<View> view)
 			{
+				if (working) return;
 				working = true;
 				pause = false;
 
@@ -116,7 +118,7 @@ namespace Pong
 					}
 				}));
 
-				threads.push_back(std::make_shared<std::thread>([&]()
+				threads.push_back(std::make_shared<std::thread>([&, view]()
 				{
 					while (working)
 					{
@@ -127,7 +129,7 @@ namespace Pong
 
 				threads.push_back(std::make_shared<std::thread>([&]()
 				{
-					while (working &&!pause)
+					while (working && !pause)
 					{
 						DoScripts();
 						std::this_thread::sleep_for(scriptCooldown);
@@ -156,6 +158,6 @@ namespace Pong
 			}
 		};
 
-		
+
 	}
 }

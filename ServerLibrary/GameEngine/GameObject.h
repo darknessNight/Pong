@@ -11,12 +11,14 @@ namespace Pong
 	{
 		class GameObject
 		{
+			friend class GameEngine;
 		public:
 			virtual ~GameObject() = default;
 
 			typedef Internet::ConnectionObject::Type Type;
+			GameEngine* engine;
+			std::chrono::high_resolution_clock::time_point lastPhysic;
 		protected:
-			friend class GameEngine;
 			std::shared_ptr<std::shared_mutex> changeMutex=std::make_shared<std::shared_mutex>();
 			std::shared_ptr<std::shared_mutex> positionMutex = std::make_shared<std::shared_mutex>();
 			Pointf position, size;
@@ -53,12 +55,18 @@ namespace Pong
 				std::lock_guard<std::shared_mutex> lock(*changeMutex);
 				this->lives = lives;
 			}
+
+			virtual void SetEngine(GameEngine* engine)
+			{
+				this->engine = engine;
+			}
 		public:
 			GameObject(const GameObject& other)
 			{
 				changeMutex = std::make_shared<std::shared_mutex>();
 				positionMutex = std::make_shared<std::shared_mutex>();
 				*this = other;
+				lastPhysic = std::chrono::high_resolution_clock::time_point::min();
 			}
 
 			GameObject(Pointf pos, Pointf size, Type type);
@@ -79,7 +87,7 @@ namespace Pong
 			virtual Type GetType() const
 			{
 				std::shared_lock<std::shared_mutex> lock(*changeMutex);
-				return Type::DeadWall;
+				return type;
 			}
 
 			virtual int GetLives() const
@@ -135,11 +143,7 @@ namespace Pong
 				
 			}
 
-			virtual void DoPhysic()
-			{
-				std::shared_lock<std::shared_mutex> lock(*positionMutex);
-
-			}
+			virtual void DoPhysic();
 		};
 
 

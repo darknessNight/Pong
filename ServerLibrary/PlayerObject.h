@@ -33,7 +33,7 @@ namespace Pong
 			if (id == Internet::Player1)
 			{
 				horizontalMove = false;
-				direction = 1;
+				direction = -1;
 			}
 			if (id == Internet::Player2)
 			{
@@ -43,7 +43,7 @@ namespace Pong
 			if (id == Internet::Player3)
 			{
 				horizontalMove = false;
-				direction = -1;
+				direction = 1;
 			}
 
 			GameObject::SetLives(PlayerInitLives);

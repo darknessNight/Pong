@@ -1,8 +1,7 @@
 #pragma once
 
-#include "SFML\Graphics.hpp"
-#include "../ServerLibrary/InternetProtocol/ConstantsAndStructs.h"
-#include <vector>
+#include "SFML/Graphics.hpp"
+#include "../ServerLibrary/InternetProtocol/JsonClientProtocolConnection.h"
 
 #define WINDOWSIZE 500
 
@@ -12,6 +11,11 @@ public:
 	void start();
 	void startDrawing();
 private:
+	bool IsWindowOpen();
+	bool PoolEventIfCan(sf::Event &event);
+
+	std::mutex mutex;
+	std::shared_ptr<Pong::Internet::ClientProtocolConnection> connection;
 	sf::RenderWindow window;
 	bool stopDrawing;
 	std::string adres;
