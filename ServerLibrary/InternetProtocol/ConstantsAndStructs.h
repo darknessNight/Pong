@@ -23,7 +23,7 @@ namespace Pong
 		{
 			enum Type
 			{
-				Test,
+				DeadWall,
 				BallCommon,
 				BallRed,
 				Wall,

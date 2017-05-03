@@ -11,7 +11,7 @@ namespace Pong
 	public:
 		DeadWall(std::shared_ptr<PlayerObject> player)
 			:GameObject(GetPosFromId(player->GetType()), GetSizeFromId(player->GetType()),
-				Type::Test), myPlayer(player)
+				Type::DeadWall), myPlayer(player)
 		{}
 
 	protected:

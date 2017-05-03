@@ -30,7 +30,7 @@ std::string TestAll()
 	std::stringstream ret;
 	for ( int i =  0; i < funcs.size(); i++ )
 	{
-		ret << "\n Test " << (*cName)[i] << ":" << (*sName)[i] << " result: ";
+		ret << "\n DeadWall " << (*cName)[i] << ":" << (*sName)[i] << " result: ";
 		ret << (funcs[i]()?"SUCCESS":"FAILED");
 	}
 	return ret.str();
@@ -43,7 +43,7 @@ std::string Test() {
 	std::stringstream ret;
 	if (lastF != nullptr) {
 		int i = *lastF;
-		ret << "\n Test " << (*cName)[i] << ":" << (*sName)[i] << " result: ";
+		ret << "\n DeadWall " << (*cName)[i] << ":" << (*sName)[i] << " result: ";
 		ret << (funcs[i]() ? "SUCCESS" : "FAILED");
 	}
 	return ret.str();
@@ -60,5 +60,5 @@ AutoAdd::AutoAdd(bool(*f)(), std::string suitName, std::string caseName, bool la
 
 bool PromptMessage(std::string str)
 {
-	return MessageBoxA(nullptr, str.c_str(), "Test", MB_YESNO | MB_ICONQUESTION)==IDYES;
+	return MessageBoxA(nullptr, str.c_str(), "DeadWall", MB_YESNO | MB_ICONQUESTION)==IDYES;
 }

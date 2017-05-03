@@ -79,7 +79,7 @@ namespace Pong
 			virtual Type GetType() const
 			{
 				std::shared_lock<std::shared_mutex> lock(*changeMutex);
-				return Type::Test;
+				return Type::DeadWall;
 			}
 
 			virtual int GetLives() const

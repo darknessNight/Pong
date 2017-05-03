@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BadBall.h" />
+    <ClInclude Include="CommonBall.h" />
     <ClInclude Include="Consts.h" />
     <ClInclude Include="DeadWall.h" />
     <ClInclude Include="GameEngine\Helpers.h" />
