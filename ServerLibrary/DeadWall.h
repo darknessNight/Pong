@@ -44,7 +44,7 @@ namespace Pong
 			}
 			if (id == Internet::Player3)
 			{
-				return { -Consts::BALL_RADIUS, -BoardHeight / 2 };
+				return { -Consts::BALL_RADIUS*2, -BoardHeight / 2 };
 			}
 			return {};
 		}
