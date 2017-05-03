@@ -107,7 +107,7 @@ bool LinearFunctions_Deadzones::checkIfPointIsInDeadZone(Pointf pos)
 		if (pos.y <= y1 && pos.y >= y2)
 			return true;
 	}
-	else if(pointIsWithinDomain(pos.y)){
+	else if(functionType == VERTICAL && pointIsWithinDomain(pos.y)){
 		float x1 = F1(pos.y);	//in this case F1 returns the right coord.
 		float x2 = F2(pos.y);	//in this case F2 returns the left coord.
 		if (pos.x <= x1 && pos.x >= x2)

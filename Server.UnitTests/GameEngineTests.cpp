@@ -267,6 +267,16 @@ namespace Pong
 				auto result = gameEngine->WillCollide(o1, { 100,0 });
 				Assert::IsTrue(result);
 			}
+			TEST_METHOD(SmallValuesTest1) {
+				auto gameEngine = PrepareGameEngine();
+
+				auto o1 = gameEngine->CreateObject({ 0.99f,0.45f }, { 0.01f,0.1f }, GameObject::Type::DeadWall);
+				auto o2 = gameEngine->CreateObject({ 0.446364f, 0.99f }, { 0.1f,0.01f }, GameObject::Type::DeadWall);
+				auto o3 = gameEngine->CreateObject({ 0, 0.45f }, { 0.01f,0.1f }, GameObject::Type::DeadWall);
+
+				auto result = gameEngine->WillCollide(o2, { 0.4f,0 });
+				Assert::IsFalse(result);
+			}
 		};
 	}
 }
