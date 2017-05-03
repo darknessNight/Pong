@@ -1,6 +1,7 @@
 #pragma once
 #include "Connections.h"
 #include <SFML/Network.hpp>
+#include <mutex>
 
 namespace Pong
 {
@@ -14,6 +15,7 @@ namespace Pong
 			std::function<void(Connection*)> disconnectAction,
 				errorAction;
 			std::vector<byte> lastBuffer;
+			std::mutex sendingMutex;
 			friend class TcpServer;
 		protected:
 			TcpConnection()
@@ -31,6 +33,9 @@ namespace Pong
 
 			bool IsSomethingToReceive() override
 			{
+				if (lastBuffer.size() > 0)
+					return true;
+
 				const int bufferSize = 100;
 				byte buffer[bufferSize];
 				std::size_t count;
@@ -143,6 +148,7 @@ namespace Pong
 
 			void SendBytes(std::vector<byte> bytes) override
 			{
+				std::lock_guard<std::mutex> lock(sendingMutex);
 				socket.setBlocking(true);
 				auto status = socket.send(bytes.data(), bytes.size());
 				DoErrorActionIfNeeded(status);
