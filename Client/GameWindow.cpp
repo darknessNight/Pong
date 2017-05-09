@@ -121,6 +121,13 @@ void GameWindow::start() {
 
 
 void GameWindow::startDrawing() {
+	auto myId = connection->GetMyId();
+	sf::View view = window.getDefaultView();
+
+	view.rotate(90*(myId-1));
+
+	window.setView(view);
+
 	while (!this->stopDrawing) {
 		std::vector<Pong::Internet::ConnectionObject> temp;
 		try {
