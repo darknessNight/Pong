@@ -52,6 +52,7 @@ void GameWindow::start() {
 
 		while (PoolEventIfCan(event))
 		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));//sleep 10 milliseconds
 
 			if (event.type == sf::Event::Closed) {
 				this->stopDrawing = true;
@@ -121,6 +122,13 @@ void GameWindow::start() {
 
 
 void GameWindow::startDrawing() {
+	auto myId = connection->GetMyId();
+	sf::View view = window.getDefaultView();
+
+	view.rotate(90*(myId-1));
+
+	window.setView(view);
+
 	while (!this->stopDrawing) {
 		std::vector<Pong::Internet::ConnectionObject> temp;
 		try {
@@ -128,7 +136,7 @@ void GameWindow::startDrawing() {
 			//TODO on nie czeka, a¿ bêdzie coœ, tylko zwraca pust¹ tablicê, zrób z tym co chcesz
 			while (temp.size() == 0) {
 				temp = connection->GetLatestObjectsFromServer();
-				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			}
 		}
 		catch (std::exception e)

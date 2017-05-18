@@ -9,7 +9,7 @@ namespace Pong
 	const std::chrono::milliseconds PlayerShieldTime = std::chrono::milliseconds(10000);
 	const int PlayerInitLives = 3;
 	const float MaxBallSpeed = .05f;
-	const float MinBallSpeed = 0.002f;
+	const float MinBallSpeed = 0.01f;
 	const float BoardWidth = 1.f;
 	const float BoardHeight = 1.f;
 	const int BadBallLives = 10;
